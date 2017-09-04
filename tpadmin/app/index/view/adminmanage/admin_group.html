@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector">
+                                                                              
+                    <h2 class="sub-header">管理组列表</h2>
+                    {if condition="$gid==1"}
+                    <h6><a href="/admin_group_add.html" style="color:blue;">新增管理组</a></h6>
+                    {/if}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>组群名</th>
+                                    
+                                    <th>组群成员</th>
+                                   
+                                    <th>描述</th>
+                                                                                                                                                                   
+                                    <th>操作</th>
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                
+                                {volist name="admin_group" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$vo.name}</td>
+                                    
+                                    <td>{$vo.admin_users}</td>
+                                   
+                                    <td>{$vo.remark}</td>
+                                                                                                                                                                                                                                                                                                     
+                                    <td>
+                                        <a href="/admin_group_edit/{$vo.gid}.html">编辑</a>|
+
+                                        <a href="javascript:if(confirm('确实要删除吗?'))location='/admin_group_del/{$vo.gid}.html'">删除</a>
+                                    </td>
+                                                                       
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                   
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+
+            $("#date_begin").val(""); 
+            $("#date_end").val(""); 
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+
+        
+
+            // $("#page_next").click(function(e) {
+            //     $("#pager").val(1 + 1) $("#selector").submit()
+            // })
+
+            // $("#page_prev").click(function(e) {
+            //     $("#pager").val(1 - 1) $("#selector").submit()
+            // })
+
+      
+
+         
+        })
+	</script>
+</body>
+</html>

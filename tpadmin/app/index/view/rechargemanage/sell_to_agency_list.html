@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="get" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                     
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="出售代理ID" name="sell_agency_uid" value="{$Think.get.sell_agency_uid}" id='sell_agency_uid'><br/> 
+                                <input type="text" placeholder="购买代理ID" name="buy_agency_uid" value="{$Think.get.buy_agency_uid}" id='buy_agency_uid'><br/>
+                            </div>
+                                                
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <span class="input-group-addon">创建起始：</span>
+                                    <input type="text" class="input-sm form-control" name="date_begin" id="date_begin" value="{$Think.get.date_begin}">
+                                    <span class="input-group-addon">创建结束：</span>
+                                    <input type="text" class="input-sm form-control" name="date_end" id="date_end" value="{$Think.get.date_end}">
+                                </div>
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">充值列表</h2>
+                    <table border="1">
+                        <tr>
+                            <td>今日</td>
+                            <td>昨日</td>
+                            <td>上周</td>
+                            <td>总共</td>
+                        </tr>
+                        <tr>
+                            <td>{$charge_info.today ?? ''}</td>
+                            <td>{$charge_info.yesterday ?? ''}</td>
+                            <td>{$charge_info.lastweek ?? ''}</td>
+                            <td>{$charge_info.all_recharge ?? ''}</td>
+                        </tr>
+                    </table>
+
+                    <h6>
+                        <div clss="col-xs-6 colsm-3 placeholder">
+                            <button type="button" class="btn btn-default" aria-label="Left Align" id="daochu" >
+                                导出
+                            </button>
+                        </div> 
+                    </h6>
+     
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>序号</th>
+                                    
+                                    <th>出售代理UID</th>
+                                    
+                                    <th>购买代理UID</th>
+                                    
+                                    <th>房卡数</th>
+                                                                                                       
+                                    <th>购买时间</th>                                                                    
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {volist name="all_info" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$k}</td>
+                                    
+                                    <td>{$vo.sell_agency_uid}</td>
+                                    
+                                    <td>{$vo.buy_agency_uid}</td>
+                                                                                                                                                               
+                                    <td>{$vo.dimond_num}</td>
+                                                                                                         
+                                    <td>{php}if (!empty($vo['create_time'])) echo date('Y-m-d H:i:s',$vo['create_time']) {/php}</td>
+                                                                      
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+                       
+        })
+
+        $('#daochu').click(function(){
+            var sell_agency_uid = $('#sell_agency_uid').val();
+            var buy_agency_uid = $('#buy_agency_uid').val();
+            var date_begin = $('#date_begin').val();
+            var date_end = $('#date_end').val();
+            var url = '/sell_to_agency_list_down_excel?sell_agency_uid='+sell_agency_uid+'&buy_agency_uid='+buy_agency_uid+'&date_begin='+date_begin+'&date_end='+date_end;
+            window.location.href = url; 
+        })
+	</script>
+</body>
+</html>

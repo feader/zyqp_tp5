@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="get" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                                                                                                
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <span class="input-group-addon">开始时间：</span>
+                                    <input type="text" class="input-sm form-control" name="date_begin" id="date_begin" value="{$Think.get.date_begin}">
+                                    <span class="input-group-addon">结束时间：</span>
+                                    <input type="text" class="input-sm form-control" name="date_end" id="date_end" value="{$Think.get.date_end}">
+                                </div>
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">流水列表</h2><span>总充值房卡：{$all_recharge}</span>
+ 
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>序号</th>
+                                    
+                                    <th>日期</th>
+                                    
+                                    <th>房卡消耗数量</th>                                    
+                                
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {volist name="all_info" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$k}</td>
+                                                                       
+                                    <td>{php}if (!empty($vo['write_time'])) echo date('Y-m-d H:i:s',$vo['write_time']) {/php}</td>
+                                                                                                       
+                                    <td>{$vo.today_total_dimond}</td>
+                                                                       
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+                       
+        })
+
+        $('#daochu').click(function(){
+            var uid = $('#uid').val();
+            var order_id = $('#order_id').val();
+            var alipay_order_id = $('#alipay_order_id').val();
+            var date_begin = $('#date_begin').val();
+            var date_end = $('#date_end').val();
+            var url = '/rechargelist_down_excel?uid='+uid+'&order_id='+order_id+'&alipay_order_id='+alipay_order_id+'&date_begin='+date_begin+'&date_end='+date_end;
+            window.location.href = url; 
+        })
+	</script>
+</body>
+</html>

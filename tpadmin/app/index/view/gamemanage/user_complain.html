@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="get" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                     
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="玩家UID" name="uid" value="{$Think.get.uid}" id='uid'><br/> 
+                                <input type="text" placeholder="处理人" name="handler" value="{$Think.get.handler}" id='handler'><br/>
+                            </div>
+                                                
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <span class="input-group-addon">创建起始：</span>
+                                    <input type="text" class="input-sm form-control" name="date_begin" id="date_begin" value="{$Think.get.date_begin}">
+                                    <span class="input-group-addon">创建结束：</span>
+                                    <input type="text" class="input-sm form-control" name="date_end" id="date_end" value="{$Think.get.date_end}">
+                                </div>
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">玩家反馈</h2>
+                    
+
+                    <h6>
+                        <div clss="col-xs-6 colsm-3 placeholder">
+                            <button type="button" class="btn btn-default" aria-label="Left Align" id="daochu" >
+                                导出
+                            </button>
+                        </div> 
+                    </h6>
+     
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>序号</th>
+                                    
+                                    <th>玩家UID</th>
+                                    
+                                    <th>联系方式</th>
+                                    
+                                    <th>状态</th>
+                                    
+                                    <th>内容</th>
+                                   
+                                    <th>回复</th>
+                                   
+                                    <th>处理人</th>
+                                                                                                       
+                                    <th>创建时间</th>                                                                    
+                                    <th>更新时间</th>                                                                    
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {volist name="all_info" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$k}</td>
+                                    
+                                    <td>{$vo.uid}</td>
+                                    
+                                    <td>{$vo.contact_way}</td>
+                                    
+                                    <td>{$vo.status==1 ? '已回复' : '未回复'}</td>
+                                                                                                                                                                                                                                                                                                                              
+                                    <td>{$vo.content}</td>
+                                   
+                                    <td>{$vo.call_back}</td>
+                                   
+                                    <td>{$vo.handler}</td>
+                                                                                                         
+                                    <td>{php}if (!empty($vo['create_time'])) echo date('Y-m-d H:i:s',$vo['create_time']) {/php}</td>
+                                   
+                                    <td>{php}if (!empty($vo['update_time'])) echo date('Y-m-d H:i:s',$vo['update_time']) {/php}</td>
+                                                                      
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+                       
+        })
+
+        $('#daochu').click(function(){
+            var uid = $('#uid').val();
+            var handler = $('#handler').val();
+            var date_begin = $('#date_begin').val();
+            var date_end = $('#date_end').val();
+            var url = '/user_complain_down_excel?uid='+uid+'&handler='+handler+'&date_begin='+date_begin+'&date_end='+date_end;
+            window.location.href = url; 
+        })
+	</script>
+</body>
+</html>

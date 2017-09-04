@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                        
+                    <form id="selector" method="post" action="/admin_group_save.html">
+                                                    
+                    <h2 class="sub-header">组群权限列表</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                                                                           
+                            <tbody>
+
+                                <tr>
+                                    <td>组群名：</td>
+                                    <td><input type="text" name="name" value="{$admin_group_info.name}"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>描述：</td>
+                                    <td><input type="text" name="remark" value="{$admin_group_info.remark}"></td>
+                                </tr>
+                                
+                                {volist name="group_menu" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$key}</td>
+                                                                                                                                                               
+                                    <td>
+                                        {volist name="vo" id="vo1" key="k1"}   
+
+                                            <input type="checkbox" name="power[]" {if $vo1.check eq 1} checked="checked" {/if} value="{$vo1.value}"> {$key}&nbsp;
+
+                                        {/volist}  
+                                    </td>
+                                                                                                                                                                              
+                                </tr>
+                                {/volist}                                                                                                                                         
+                            
+                                <input type="hidden" name="gid" value="{$admin_group_info.gid}">
+
+                            </tbody>
+                        </table>
+                    </div>  
+
+                    <div clss="col-xs-6 colsm-3 placeholder" style="margin:0 auto;width:100px;">
+                        <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit">
+                            保存修改
+                        </button>
+                    </div>                 
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	// $(document).ready(function() {     
+     //        $("#date_begin").val(""); 
+     //        $("#date_end").val(""); 
+     //        $('.input-daterange').datepicker({
+     //            language: "zh-CN",
+     //            endDate: "+0d",
+     //            startDate: "-2y",
+     //            autoclose: true,
+     //            todayHighlight: true,
+     //            todayBtn: "linked",
+     //            format: "yyyy-mm-dd",
+     //        })     
+     //    })
+      
+	</script>
+</body>
+</html>

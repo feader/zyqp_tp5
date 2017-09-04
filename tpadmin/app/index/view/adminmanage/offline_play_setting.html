@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="post" action="/offline_play_setting_save.html">
+                  
+                    <h2 class="sub-header">设置条件</h2>
+
+                        <div class="row placeholders">
+                                                                                                                                                    
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <span class="input-group-addon">开始</span>
+                                    <input type="text" class="input-sm form-control" name="start_time" id="date_begin" value="{$offline_play_setting.start_time|date="Y-m-d",###}" readonly="readonly">
+                                    <span class="input-group-addon">结束</span>
+                                    <input type="text" class="input-sm form-control" name="end_time" id="date_end" value="{$offline_play_setting.end_time|date="Y-m-d",###}" readonly="readonly">
+                                </div>
+                            </div>
+                           
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="参加分数" name="join_point" value="{$offline_play_setting.join_point}"><br/>                                
+                                <input type="hidden"  name="id" value="{$offline_play_setting.id}"><br/>                                
+                            </div>
+                            
+
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" =="">
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                                                                                                             
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+
+            // $("#date_begin").val(""); 
+            // $("#date_end").val(""); 
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                // endDate: "+90d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: false,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+
+        
+
+            // $("#page_next").click(function(e) {
+            //     $("#pager").val(1 + 1) $("#selector").submit()
+            // })
+
+            // $("#page_prev").click(function(e) {
+            //     $("#pager").val(1 - 1) $("#selector").submit()
+            // })
+
+      
+
+         
+        })
+	</script>
+</body>
+</html>

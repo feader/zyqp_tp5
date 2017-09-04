@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <form id="selector">
+                    <h2 class="sub-header">查询结果</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="online_users">在线人数</a>
+                                    </td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>普通房间数</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>VIP房间数</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>竞技场房间数</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>吃入金币</td>
+                                    <td>20710</td>
+                                </tr>
+                                <tr>
+                                    <td>吐出金币</td>
+                                    <td>13100</td>
+                                </tr>
+                                <tr>
+                                    <td>当前抽水</td>
+                                    <td>0.03</td>
+                                </tr>
+                                <tr>
+                                    <td>抽水刷新周期</td>
+                                    <td>3.00小时</td>
+                                </tr>
+                                <tr>
+                                    <td>抽水设置</td>
+                                    <td>0.06/0.03/0.03</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- endif tbl -->
+               	</form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+
+            $("#date_begin").val("") $("#date_end").val("") $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+
+        
+
+            $("#page_next").click(function(e) {
+                $("#pager").val(1 + 1) $("#selector").submit()
+            })
+
+            $("#page_prev").click(function(e) {
+                $("#pager").val(1 - 1) $("#selector").submit()
+            })
+
+      
+
+         
+        })
+	</script>
+</body>
+</html>

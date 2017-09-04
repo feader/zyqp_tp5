@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="post" action="/agency_add.html">
+                   
+                        <h2 class="sub-header">代理生成</h2>
+                        
+                        <div class="row placeholders">
+                            
+                            <div class="col-xs-6 colsm-3 placeholder" style="width:100%;">
+                               
+                                <button type="button" class="btn btn-default" aria-label="Left Align" id="agency_add1" >
+                                    生成皇冠代理
+                                </button>
+                                <br/><br/>
+
+                                <p style="color:red;">生成钻石或白金代理，必须输入上一级代理账号</p>
+                                
+                                <input type="text" placeholder="皇冠代理账号" name="uber_agency_hg" id="uber_agency_hg">
+                                <br/><br/>
+                                <button type="button" class="btn btn-default" aria-label="Left Align" id="agency_add2" >
+                                    生成钻石代理
+                                </button>
+                                <br/><br/>
+
+                                <input type="text" placeholder="钻石代理账号" name="uber_agency_zs" id="uber_agency_zs">
+                                <br/><br/>
+                                <button type="button" class="btn btn-default" aria-label="Left Align" id="agency_add3" >
+                                    生成白金代理
+                                </button>
+                                <br/><br/>
+                                
+                            </div>
+                            
+                            <div class="col-xs-6 colsm-3 placeholder" style="width:100%;">
+    
+                                <p id="back_msg"></p>
+
+                            </div>
+
+                        </div>
+                                              
+                        <!-- endif tbl -->
+
+                    </form>
+            </div>        
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+<script>
+    $('#commit').click(function(){
+       
+        $('#selector').submit();
+       
+    }) 
+
+    $('#agency_add1').click(function(){
+        $.ajax({
+            dataType:'json',
+            url:'/agency_add.html',
+            type:'post',
+            data:{act:'grade1'},
+            success:function(res){
+                if(res){
+                    $('#back_msg').html('代理账号：'+res.uid+'<br/>'+'代理密码：'+res.password);                
+                }else{
+                    $('#back_msg').html(res.msg);             
+                }
+            }
+        })
+    })
+
+    $('#agency_add2').click(function(){
+        var uber_agency = $('#uber_agency_hg').val();
+        if(uber_agency!=''){
+            $.ajax({
+                dataType:'json',
+                url:'/agency_add.html',
+                type:'post',
+                data:{act:'grade2',uber_agency:uber_agency},
+                success:function(res){
+                    if(res){
+                        $('#back_msg').html('代理账号：'+res.uid+'<br/>'+'代理密码：'+res.password);                
+                    }else{
+                        $('#back_msg').html(res.msg);             
+                    }
+                }
+            })
+        }else{
+            alert('皇冠代理不能为空！');
+        }        
+    })
+
+    $('#agency_add3').click(function(){
+        var uber_agency = $('#uber_agency_zs').val();
+        if(uber_agency!=''){
+            $.ajax({
+                dataType:'json',
+                url:'/agency_add.html',
+                type:'post',
+                data:{act:'grade3',uber_agency:uber_agency},
+                success:function(res){
+                    if(res){
+                        $('#back_msg').html('代理账号：'+res.uid+'<br/>'+'代理密码：'+res.password);                
+                    }else{
+                        $('#back_msg').html(res.msg);             
+                    }
+                }
+            })
+        }else{
+            alert('钻石代理不能为空！');
+        }        
+    })
+
+</script>
+</body>
+</html>

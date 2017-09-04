@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                <form id="selector" method="post" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                    <div class="row placeholders">
+                                                                 
+                        <div class="col-xs-6 col-sm-3">
+                            <input type="text" placeholder="玩家UID" name="uid" value="" id="ruid"><br/> 
+                        </div>                           
+
+                        <div clss="col-xs-6 colsm-3 placeholder">
+                            <button type="button" class="btn btn-default" aria-label="Left Align" onclick="check_user()">
+                                查询
+                            </button>
+                        </div> 
+
+                    </div>
+                
+
+                    <div class="show_control" style="display:none;">
+                        
+                        <h2 class="sub-header">玩家信息</h2>
+                    
+                        <div class="table-responsive">
+                            
+                            <table class="table table-striped">
+                                
+                                <thead>
+                                    
+                                    <tr>                      
+                                        
+                                        <td><span class='back_msg'></span></td>   
+
+                                        <td>                                      
+                                            大师分：<input type="text" placeholder="减分在数字前加-" name="add_point" value="" id="add_point" class='show_control1' style="display:none;">                                
+                                        </td>                                
+                                        
+                                        <td>
+                                            
+                                            <button type="button" class="btn btn-default show_control1" aria-label="Left Align" onclick="master_point_handle()" style="display:none;">
+                                                提交
+                                            </button>
+
+                                        </td>    
+
+                                    </tr> 
+
+                                </thead>
+                                
+                                <input type="hidden" value="" id="uid">
+                            
+                            </table>
+                       
+                        </div>
+                    
+                    </div>
+                                                                             
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+        $(document).ready(function() {         
+            $("#date_begin").val(""); 
+            $("#date_end").val(""); 
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })     
+               
+        })
+
+
+        function check_user() {
+            var uid = $('#ruid').val();
+            if(uid==''){
+                alert('玩家UID为空！');
+                return false;
+            }
+            $.ajax({
+                type:'GET',
+                url:'/check_user_info',
+                data:{uid:uid},
+                dataType:'json',
+                success:function(res){
+                    if(res.code){
+                        $('.back_msg').html(res.msg);
+                        $('.show_control').show();
+                        $('.show_control1').show();
+                        $('#uid').val(res.uid);
+                    }else{
+                        $('.back_msg').html(res.msg);
+                        $('.show_control').show();
+                    }               
+                } 
+            })
+        }
+
+        function master_point_handle() {
+            var uid = $('#uid').val();
+            var ruid = $('#ruid').val();
+            var add_point = $('#add_point').val();
+            if(uid==''){
+                alert('非法操作！');
+                return false;
+            }
+            if(uid!=ruid){
+                alert('非法操作！');
+                return false;
+            }
+            $.ajax({
+                type:'GET',
+                url:'/master_point_handle',
+                data:{uid:uid,add_point:add_point},
+                dataType:'json',
+                success:function(res){
+                    if(res.code){
+                        alert(res.msg);
+                        window.location.reload();
+                    }else{
+                        alert(res.msg);
+                        window.location.reload();
+                    }               
+                } 
+            })
+        }
+        
+    </script>
+</body>
+</html>

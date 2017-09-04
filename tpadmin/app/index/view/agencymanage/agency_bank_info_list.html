@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="get" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                     
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="代理账号" name="uid" value="{$Think.get.uid}" id='uid'><br/>                                
+                                                          
+                            </div>
+                                                                                                        
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">代理银行信息列表</h2>
+                    
+                    <h6>
+                        <div clss="col-xs-6 colsm-3 placeholder">
+                            <button type="button" class="btn btn-default" aria-label="Left Align" id="daochu" >
+                                导出
+                            </button>
+                        </div> 
+                    </h6>
+     
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>序号</th>
+                                    
+                                    <th>代理账号</th>
+
+                                    <th>微信</th>
+                                    
+                                    <th>支付宝</th>
+                                    
+                                    <th>开户行</th>
+
+                                    <th>分行</th>
+
+                                    <th>开户名</th>
+                                    
+                                    <th>开户账号</th>
+                                                                                                                                                                                                                                                                                                                                                   
+                                    <th>操作</th>                                                                    
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {volist name="all_info" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$k}</td>
+                                    
+                                    <td>{$vo.uid}</td>
+                                                                                                           
+                                    <td>{$vo.weixin}</td>
+                                    
+                                    <td>{$vo.alipay}</td>
+
+                                    <td>{$vo.opening_bank}</td>
+
+                                    <td>{$vo.branch}</td>
+
+                                    <td>{$vo.bank_name}</td>
+                                    
+                                    <td>{$vo.bank_account}</td>
+                                                                                                                                                                                                                     
+                                    <td>
+                                        {if condition="$gid==1"}
+                                            <a href="/agency_bank_info_edit/{$vo.uid}.html">编辑</a>
+                                        {/if}
+                                    </td>
+                                                                                                        
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+                       
+        })
+
+        $('#daochu').click(function(){
+            var uid = $('#uid').val();
+            var url = '/agency_bank_info_list?action=down_excel&uid='+uid;
+            window.location.href = url; 
+        })
+	</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<div class="col-sm-3 col-md-2 sidebar">
+
+    {volist name="left_menus" id="vo" key="k"}
+    	<p style="color:#0083f3;">{$key}</p>
+        <ul class="nav nav-sidebar">    
+            {volist name="vo" id="vo1" key="k1"} 	
+                <li {if $action eq $key} class="active" {/if}>
+                    <a href="/{$key}.html">{$vo1}</a>
+                </li> 
+            {/volist}             
+        </ul>
+    {/volist}
+</div>

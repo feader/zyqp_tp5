@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                        
+                    <form id="selector">
+                                                    
+                    <h2 class="sub-header">参数列表</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>参数名</th>
+                                    
+                                    <th>参数说明</th>
+                                                                                                       
+                                    <th>参数值</th>
+                                    
+                                    <th>操作</th>
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {volist name="setting_list" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$vo.setting_name}</td>
+                                                                                                                                                               
+                                    <td>{$vo.value_introduce}</td>
+                                                                                                        
+                                    <td><input type="text" value="{$vo.setting_value}"></td>
+                                    
+                                    <td><input type="button" value='提交' class="edit_save"><input type="hidden" value="{$vo.id}"></td>
+                                                                       
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>                   
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	// $(document).ready(function() {     
+     //        $("#date_begin").val(""); 
+     //        $("#date_end").val(""); 
+     //        $('.input-daterange').datepicker({
+     //            language: "zh-CN",
+     //            endDate: "+0d",
+     //            startDate: "-2y",
+     //            autoclose: true,
+     //            todayHighlight: true,
+     //            todayBtn: "linked",
+     //            format: "yyyy-mm-dd",
+     //        })     
+     //    })
+
+
+    $('.edit_save').click(function(){
+        var id = $(this).next().val();
+        var setting_value = $(this).parent().prev().children().val();
+        $.ajax({
+            type:'post',
+            url:'/system_setting_save.html',
+            data:{id:id,setting_value:setting_value},
+            dataType:'json',
+            success:function(res){
+                if(res.code){
+                    alert(res.msg);
+                    location.href = '/system_setting.html';
+                }else{
+                    alert(res.msg);
+                    location.href = '/system_setting.html';
+                }           
+            } 
+        })
+    })
+    
+	</script>
+</body>
+</html>

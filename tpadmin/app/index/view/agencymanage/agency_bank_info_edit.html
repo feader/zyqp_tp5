@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="post" action="/agency_bank_info_save.html">
+                   
+                        <h2 class="sub-header">代理银行资料编辑</h2>
+                        
+                        <p align="center">代理:{$agency_bank_info.uid}</p>
+
+                        <div class="row placeholders">
+                            
+                            <div class="col-xs-6 colsm-3 placeholder" style="width:100%">
+                                <table>
+                                    <tr>
+                                        <td>微信:</td>
+                                        <td><input type="text" placeholder="微信" name="weixin" id="weixin" value="{$agency_bank_info.weixin}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>支付宝:</td>
+                                        <td><input type="text" placeholder="支付宝" name="alipay" id="alipay" value="{$agency_bank_info.alipay}" ></td>
+                                    </tr>
+                                    <tr>
+                                        <td>开户行:</td>
+                                        <td><input type="text" placeholder="开户行" name="opening_bank" id="opening_bank" value="{$agency_bank_info.opening_bank}" ></td>
+                                    </tr>
+                                    <tr>
+                                        <td>分行:</td>
+                                        <td><input type="text" placeholder="分行" name="branch" id="branch" value="{$agency_bank_info.branch}" ></td>
+                                    </tr>
+                                    <tr>
+                                        <td>开户名:</td>
+                                        <td><input type="text" placeholder="开户名" name="bank_name" id="bank_name" value="{$agency_bank_info.bank_name}" ></td>
+                                    </tr>
+                                    <tr>
+                                        <td>开户账号:</td>
+                                        <td><input type="text" placeholder="开户账号" name="bank_account" id="bank_account" value="{$agency_bank_info.bank_account}" ></td>
+                                    </tr>
+                                </table>
+                                
+                                <input type="hidden"name="uid" value="{$agency_bank_info.uid}"> 
+                                <input type="hidden"name="id" value="{$agency_bank_info.id}">                                 
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    保存修改
+                                </button>
+                            </div> 
+                        </div>
+                                              
+                        <!-- endif tbl -->
+
+                    </form>
+            </div>        
+            <!-- endif form -->
+        </div>
+
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+{include file="public/public_js" /} 
+          
+<script>
+    $('#commit').click(function(){
+       
+        $('#selector').submit();
+       
+    }) 
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="post" action="/agency_save.html">
+                   
+                        <h2 class="sub-header">代理编辑</h2>
+                        
+                        <p align="center">代理:{$agency_info.uid}</p>
+
+                        <div class="row placeholders">
+                            
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <input type="password" placeholder="密码" name="password" id="password" ><br/><br/>
+                                <input type="text" placeholder="备注" name="note" id="note" value="{$agency_info.note}" ><br/><br/>
+                                {if condition="$gid==1"}
+                                代理等级：
+                                    <select name="grade">                                        
+                                        <option value="1" {if condition="$agency_info.grade==1"}selected{/if}>皇冠</option>
+                                        <option value="2" {if condition="$agency_info.grade==2"}selected{/if}>钻石</option>
+                                        <option value="3" {if condition="$agency_info.grade==3"}selected{/if}>白金</option>
+                                        <option value="4" {if condition="$agency_info.grade==4"}selected{/if}>水晶</option>                                        
+                                    </select>
+                                {/if}
+                                <input type="hidden"name="uid" value="{$agency_info.uid}"> 
+                                <input type="hidden"name="id" value="{$agency_info.id}"> 
+                                
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    保存修改
+                                </button>
+                            </div> 
+                        </div>
+                                              
+                        <!-- endif tbl -->
+
+                    </form>
+            </div>        
+            <!-- endif form -->
+        </div>
+{include file="public/public_js" /}          
+        <div>
+            <p align="center">推广二维码</p>
+        </div>
+        <div id="qrcode" style="display:none;"></div>
+        <div id="show_qrcode">
+            <p align="center"></p>
+        </div>
+        <div style="width:300px;margin:0 auto;">
+                <p style="text-align:center;">
+                    分享链接:{$fx_url}{$agency_info.uid}-{$game_id}
+                </p>
+            </div>
+        </div>
+
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+          
+<script>
+    $('#commit').click(function(){
+       
+        $('#selector').submit();
+       
+    }) 
+
+    jQuery('#qrcode').qrcode({
+        render  : "canvas",//也可以替换为table
+        width   : 160,
+        height  : 160,
+        text    : "{$fx_url}{$agency_info.uid}-{$game_id}"
+    });
+
+    //从canvas中提取图片image
+    function convertCanvasToImage(canvas) {
+        //新Image对象，可以理解为DOM
+        var image = new Image();
+        // canvas.toDataURL 返回的是一串Base64编码的URL，当然,浏览器自己肯定支持
+        // 指定格式PNG
+        image.src = canvas.toDataURL("image/png");
+        return image;
+    }
+
+    //获取网页中的canvas对象
+    var mycanvas1=document.getElementsByTagName('canvas')[0];
+
+    //将转换后的img标签插入到html中
+    var img = convertCanvasToImage(mycanvas1);
+    $('#show_qrcode').children().append(img);//imgDiv表示你要插入的容器id
+</script>
+</body>
+</html>

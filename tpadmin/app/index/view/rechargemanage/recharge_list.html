@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="get" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                     
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="代理UID" name="uid" value="{$Think.get.uid}" id='uid'><br/> 
+                                <input type="text" placeholder="订单号" name="order_id" value="{$Think.get.order_id}" id='order_id'><br/>
+                                <input type="text" placeholder="支付号" name="alipay_order_id" value="{$Think.get.alipay_order_id}" id='alipay_order_id'><br/>
+                            </div>
+                                                
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <span class="input-group-addon">创建起始：</span>
+                                    <input type="text" class="input-sm form-control" name="date_begin" id="date_begin" value="{$Think.get.date_begin}">
+                                    <span class="input-group-addon">创建结束：</span>
+                                    <input type="text" class="input-sm form-control" name="date_end" id="date_end" value="{$Think.get.date_end}">
+                                </div>
+                            </div>
+                            
+                            <!-- <input type="hidden" name="act" value="search"> -->
+
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">充值列表</h2><span>总充值金额：{$all_recharge}元</span>
+ 
+                    <h6>
+                        <div clss="col-xs-6 colsm-3 placeholder">
+                            <button type="button" class="btn btn-default" aria-label="Left Align" id="daochu" >
+                                导出
+                            </button>
+                        </div> 
+                    </h6>
+     
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>序号</th>
+                                    
+                                    <th>代理UID</th>
+                                    
+                                    <th>订单号</th>
+                                    
+                                    <th>支付号</th>
+                                                                                                       
+                                    <th>金额</th>
+                                    
+                                    <th>钻石数</th>
+                                    
+                                    <th>下单时间</th>
+                                   
+                                    <th>支付方式</th>
+                                    
+                                    <th>状态</th>
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {volist name="all_info" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$k}</td>
+                                    
+                                    <td>{$vo.uid}</td>
+                                    
+                                    <td>{$vo.order_id}</td>
+                                                                                                                                                               
+                                    <td>{$vo.alipay_order_id}</td>
+                                                                                                        
+                                    <td>{$vo.money_number/100}</td>
+                                    
+                                    <td>{$vo.dimond_number}</td>
+                                    
+                                    <td>{php}if (!empty($vo['create_time'])) echo date('Y-m-d H:i:s',$vo['create_time']) {/php}</td>
+                                    
+                                    <td>
+                                        {switch name="vo.pay_way"}
+                                            {case value="alipay"}支付宝{/case}
+                                            {case value="wxpay"}微信{/case}
+                                            {default /}错误支付方式
+                                        {/switch}
+                                    </td>
+                                   
+                                    <td>{$vo.order_status==1 ? '已支付' : '未支付'}</td>
+                                                                       
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+                       
+        })
+
+        $('#daochu').click(function(){
+            var uid = $('#uid').val();
+            var order_id = $('#order_id').val();
+            var alipay_order_id = $('#alipay_order_id').val();
+            var date_begin = $('#date_begin').val();
+            var date_end = $('#date_end').val();
+            var url = '/rechargelist_down_excel?uid='+uid+'&order_id='+order_id+'&alipay_order_id='+alipay_order_id+'&date_begin='+date_begin+'&date_end='+date_end;
+            window.location.href = url; 
+        })
+	</script>
+</body>
+</html>

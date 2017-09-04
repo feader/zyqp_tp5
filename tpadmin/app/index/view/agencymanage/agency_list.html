@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="get" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                     
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="代理账号" name="uid" value="{$Think.get.uid}" id='uid'><br/>                                
+                                <input type="text" placeholder="上级代理" name="uber_agency" value="{$Think.get.uber_agency}" id='uber_agency'><br/>                                                          
+                            </div>
+                                                
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <span class="input-group-addon">开始时间：</span>
+                                    <input type="text" class="input-sm form-control" name="date_begin" id="date_begin" value="{$Think.get.date_begin}">
+                                    <span class="input-group-addon">结束时间：</span>
+                                    <input type="text" class="input-sm form-control" name="date_end" id="date_end" value="{$Think.get.date_end}">
+                                </div>
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">代理列表</h2>
+                    
+                    <h6>
+                        <div clss="col-xs-6 colsm-3 placeholder">
+                            <button type="button" class="btn btn-default" aria-label="Left Align" id="daochu" >
+                                导出
+                            </button>
+                        </div> 
+                    </h6>
+     
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>序号</th>
+                                    
+                                    <th>代理级别</th>
+
+                                    <th>上级代理</th>
+                                    
+                                    <th>账号</th>
+                                    
+                                    <th>昵称</th>
+
+                                    <th>充值钻石</th>
+
+                                    <th>充值金额</th>
+                                    
+                                    <th>生成时间</th>
+                                                                                                                                                                                                                                            
+                                    <th>备注</th>                                                                    
+                                    
+                                    <th>操作</th>                                                                    
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {volist name="all_info" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$k}</td>
+                                    
+                                    <td>
+                                        {switch name="vo.grade"}
+                                            {case value="1"}皇冠{/case}
+                                            {case value="2"}钻石{/case}
+                                            {case value="3"}白金{/case}
+                                            {case value="4"}水晶{/case}
+                                            {default /}未知
+                                        {/switch}
+                                    </td>
+                                                                                                           
+                                    <td>{$vo.uber_agency}</td>
+                                    
+                                    <td>{$vo.uid}</td>
+
+                                    <td>{$vo.nick_name}</td>
+
+                                    <td>{$vo.recharge_dimond}</td>
+
+                                    <td>{$vo.recharge_money}</td>
+                                    
+                                    <td>{php}if (!empty($vo['register_time'])) echo date('Y-m-d H:i:s',$vo['register_time']) {/php}</td>
+
+                                    <td>{$vo.note}</td>
+                                                                                                                                                                                                                     
+                                    <td>
+                                        <a href="/agency_edit/{$vo.uid}.html">编辑</a>|
+
+                                        <a href="javascript:if(confirm('确实要删除吗?'))location='/agency_del/{$vo.id}/{$vo.uid}.html'">删除</a>
+                                    </td>
+                                                                                                        
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+                       
+        })
+
+        $('#daochu').click(function(){
+            var uid = $('#uid').val();
+            var uber_agency = $('#uber_agency').val();
+            var date_begin = $('#date_begin').val();
+            var date_end = $('#date_end').val();
+            var url = '/agency_list_down_excel?uid='+uid+'&uber_agency='+uber_agency+'&date_begin='+date_begin+'&date_end='+date_end;
+            window.location.href = url; 
+        })
+	</script>
+</body>
+</html>

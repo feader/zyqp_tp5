@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="post" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                     
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="玩家UID" name="uid" value="{$Think.post.uid}"><br/> 
+                                <input type="hidden" name="act" value="find">
+                            </div>                           
+
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit">
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">玩家信息</h2>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <td>ID：</td>
+                                    
+                                    <td>{$one_info.uid ?: ''}</td>                                                                       
+                                    
+                                </tr>
+                                <tr>
+
+                                    <td>账号名：</td>
+                                                                                                       
+                                    <td>{$one_info.username ?: ''}</td>
+
+                                </tr>
+                                 <tr>
+                                    
+                                    <td>创建日期：</td>
+                                    
+                                    <td>{php}if (!empty($one_info['register_time'])) echo date('Y-m-d H:i:s',$one_info['register_time']) {/php}</td>                                                                       
+                                    
+                                </tr>
+                                 <tr>
+                                    
+                                    <td>最近登录：</td>
+                                    
+                                    <td>{php}if (!empty($one_info['last_login_time'])) echo date('Y-m-d H:i:s',$one_info['last_login_time']) {/php}</td>                                                                       
+                                    
+                                </tr>
+                                 <tr>
+                                    
+                                    <td>最近充值：</td>
+                                    
+                                    <td>{php}if (!empty($one_info['last_dimond_charge_time'])) echo date('Y-m-d H:i:s',$one_info['last_dimond_charge_time']) {/php}</td>                                                                       
+                                    
+                                </tr>
+                                 <tr>
+                                    
+                                    <td>余额：</td>
+                                    
+                                    <td>{$one_info.dimond ?: ''}</td>                                                                       
+                                    
+                                </tr>
+                                <tr>
+                                    
+                                    <td>累计充值：</td>
+                                    
+                                    <td>{$one_info.sum_dimond ?: ''}</td>                                                                       
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <input type="hidden" value="{$one_info.uid ?: ''}" id="uid">
+                        </table>
+                    </div>
+
+                    <button type="button" class="btn btn-default" aria-label="Left Align" onclick="kickBtn()">
+                        清除卡线
+                    </button>
+                    <button type="button" class="btn btn-default" aria-label="Left Align" onclick="clear_diamond()">
+                        房卡清零
+                    </button>
+                    <button type="button" class="btn btn-default" aria-label="Left Align" onclick="ban_account()">
+                        封号
+                    </button>
+                    <button type="button" class="btn btn-default" aria-label="Left Align" onclick="dis_ban_account()">
+                        解封
+                    </button>
+                                           
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {         
+            $("#date_begin").val(""); 
+            $("#date_end").val(""); 
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })                 
+        })
+
+
+        function kickBtn() {
+            var uid = $('#uid').val();
+            var part = 'gm/kick_down'
+            if(uid==''){
+                alert('非法操作！');
+                return false;
+            }
+            $.ajax({
+                type:'GET',
+                url:'/curl_url',
+                data:{uid:uid,part:part},
+                dataType:'json',
+                success:function(res){
+                    if(res){
+                        alert('操作成功！');
+                    }else{
+                        alert('操作失败！');
+                    }
+                } 
+            })
+        }
+
+        function clear_diamond() {
+            var uid = $('#uid').val();
+            var part = 'gm/clear_diamond'
+            if(uid==''){
+                alert('非法操作！');
+                return false;
+            }
+            $.ajax({
+                type:'GET',
+                url:'/curl_url',
+                data:{uid:uid,part:part},
+                dataType:'json',
+                success:function(res){
+                    if(res){
+                        alert('操作成功！');
+                    }else{
+                        alert('操作失败！');
+                    }
+                } 
+            })
+        }
+
+        function ban_account() {
+            var uid = $('#uid').val();
+            var part = 'gm/ban_account'
+            if(uid==''){
+                alert('非法操作！');
+                return false;
+            }
+            $.ajax({
+                type:'GET',
+                url:'/curl_url',
+                data:{uid:uid,part:part},
+                dataType:'json',
+                success:function(res){
+                    if(res){
+                        alert('操作成功！');
+                    }else{
+                        alert('操作失败！');
+                    }
+                } 
+            })
+        }
+
+        function dis_ban_account() {
+            var uid = $('#uid').val();
+            var part = 'gm/dis_ban_account'
+            if(uid==''){
+                alert('非法操作！');
+                return false;
+            }
+            $.ajax({
+                type:'GET',
+                url:'/curl_url',
+                data:{uid:uid,part:part},
+                dataType:'json',
+                success:function(res){
+                    if(res){
+                        alert('操作成功！');
+                    }else{
+                        alert('操作失败！');
+                    }
+                } 
+            })
+        }
+	</script>
+</body>
+</html>

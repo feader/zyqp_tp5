@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                     
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="管理员ID" name="uid" value="{$Think.get.uid}"><br/> 
+                                <input type="text" placeholder="管理员名" name="username" value="{$Think.get.username}"> 
+                            </div>
+                                                          
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" =="">
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">管理员列表</h2>
+                    {if condition="$gid==1"}
+                    <h6><a href="/add_admin.html" style="color:blue;">新增管理员</a></h6>
+                    {/if}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <th>管理员ID</th>
+                                    
+                                    <th>管理员名字</th>
+                                    
+                                    <th>级别</th>
+                                                                                                       
+                                    <th>操作</th>
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {volist name="admin_info" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$vo.uid}</td>
+                                    
+                                    <td>{$vo.username}</td>
+                                                                                                                                                               
+                                    <td>{$vo.gid}</td>
+                                                                                                        
+                                    <td>
+                                        <a href="/admin_edit/{$vo.uid}.html">编辑</a>|
+
+                                        <a href="javascript:if(confirm('确实要删除吗?'))location='/admin_del/{$vo.uid}/{$vo.username}.html'">删除</a>
+                                    </td>
+                                                                       
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+
+            $("#date_begin").val(""); 
+            $("#date_end").val(""); 
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+
+        
+
+            // $("#page_next").click(function(e) {
+            //     $("#pager").val(1 + 1) $("#selector").submit()
+            // })
+
+            // $("#page_prev").click(function(e) {
+            //     $("#pager").val(1 - 1) $("#selector").submit()
+            // })
+
+      
+
+         
+        })
+	</script>
+</body>
+</html>
