@@ -11,10 +11,16 @@ class Agencymanage extends Auth{
 
 	private $gid;
 
+    protected $db_config;
+
 	/*
 	*根据用户权限自动加载左侧菜单栏并判断当前选择的是哪个菜单
 	*/ 
 	public function _initialize(){
+
+        $db_config = Session::get('db_config','db_config');
+
+        $this->db_config = $db_config;
 
 		$this->jump_login($this->is_login());
         
@@ -22,7 +28,7 @@ class Agencymanage extends Auth{
         
         $this->set_action($view);
 
-        $gid = Session::get('admin_group_id','admin');
+        $gid = Session::get('admin_group_id',$this->db_config['database'].'_admin');
 
         $this->gid = $gid;
 
@@ -112,7 +118,7 @@ class Agencymanage extends Auth{
 			  		
         }
 
-        $all_info = Db::name("agency")->field('uid,grade,uber_agency,nick_name,recharge_dimond,recharge_money,note,register_time')->where($where)->order(['register_time'=>'desc'])->select();
+        $all_info = Db::connect($this->db_config)->name("agency")->field('uid,grade,uber_agency,nick_name,recharge_dimond,recharge_money,note,register_time')->where($where)->order(['register_time'=>'desc'])->select();
 
         foreach ($all_info as $k => $v) {
         	
@@ -457,7 +463,7 @@ class Agencymanage extends Auth{
 			  		
         }
 
-        $agency_index_note = $agencymanage->get_index_note_info('system_setting','*',"setting_name='agency_index_note'");
+        $agency_index_note = $agencymanage->get_index_note_info('system_setting','*',"setting_name='agency_index_note'",$this->db_config);
 
         $view->agency_index_note = $agency_index_note; 
               						      
@@ -698,7 +704,7 @@ class Agencymanage extends Auth{
 
 		$where['uid'] = ['like',"%$rand_num%"];
 
-		$res = Db::name('agency')->where($where)->find();
+		$res = Db::connect($this->db_config)->name('agency')->where($where)->find();
 
 		if(!empty($res)){
 

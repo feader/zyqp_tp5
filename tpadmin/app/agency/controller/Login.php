@@ -10,18 +10,17 @@ class Login extends Controller{
 	*登陆页
 	*/ 
 	public function index(){
-		
+				
 		$view = $this->view;  
-		var_dump($_SERVER);    
         // 模板输出
-        //return $this->fetch();
+        return $this->fetch();
 
 	}
 
 	/*
 	*登陆处理
 	*/ 
-	public function sign_up(){    	
+	public function agency_sign_up(){    	
     	  	
     	$checkcode = input('request.checkcode');    
 
@@ -29,7 +28,7 @@ class Login extends Controller{
 	      
 	       //验证失败	    	
 	       return $this->error("验证码错误");	   
-	   
+	    
 	    }
 
 	    $admin_name = input('request.username');
@@ -57,14 +56,14 @@ class Login extends Controller{
 	*@$admin_name 用户名
 	*@$admin_passwd 用户密码
 	*/ 
-    private function login_handle($admin_name,$admin_passwd){
+    private function login_handle($admin_name,$admin_passwd,$db_num){
 		
 		$where = array();
 	    
 	    $where['username'] = $admin_name;
 	    
 	    $where['passwd'] = md5($admin_passwd);
-
+	    
 	    $base = model('Base');
 	    
 	    $res = $base->get_admin_info($where);
@@ -74,6 +73,8 @@ class Login extends Controller{
 	    Session::set('admin_uid',$res['uid'],'admin'); 
 	    
 	    Session::set('admin_group_id',$res['gid'],'admin');
+	    
+	    Session::set('db_num',$db_num,'admin');
         
         return $res;
 

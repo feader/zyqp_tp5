@@ -2,15 +2,25 @@
 namespace app\index\model;
 use \think\Model;
 use \think\Db;
+use \think\Session;
 
 class Tool extends Model{
+
+	//protected $db_config;
+
+	public function __construct(){
+
+		// $db_config = Session::get('db_config','db_config');
+
+		// $this->db_config = $db_config;
+	}
 
 	/*
 	*通用的查询方法
 	*/ 
-	protected static function check_info_exists($table,$field,$where){
+	protected static function check_info_exists($table,$field,$where,$db_config){
 
-		$check = Db::name($table)->field($field)->where($where)->find();
+		$check = Db::connect($db_config)->name($table)->field($field)->where($where)->find();
 
 		return $check;
 	
@@ -19,9 +29,9 @@ class Tool extends Model{
 	/*
 	*通用的更新方法
 	*/ 
-	protected static function update_handle($table,$where,$data){
+	protected static function update_handle($table,$where,$data,$db_config){
 
-		$update_res = Db::name($table)->where($where)->update($data);
+		$update_res = Db::connect($db_config)->name($table)->where($where)->update($data);
 
 		return $update_res;
 	
@@ -30,9 +40,9 @@ class Tool extends Model{
 	/*
 	*通用的插入方法
 	*/ 
-	protected static function insert_handle($table,$data){
+	protected static function insert_handle($table,$data,$db_config){
 
-		$insert_res = Db::name($table)->insertGetId($data);	
+		$insert_res = Db::connect($db_config)->name($table)->insertGetId($data);	
 
 		return $insert_res;
 	
@@ -41,14 +51,14 @@ class Tool extends Model{
 	/*
 	*修正insert 方法对唯一索引不返回值直接报错的问题
 	*/ 
-	protected static function insert_DbIns($Table,$Data = array()) {
+	protected static function insert_DbIns($Table,$Data = array(),$db_config) {
         if($Table==""||$Table===null){
             return 0;
         }else{
             $AddDb=db($Table)
               ->fetchSql(true)
               ->insertGetId($Data);
-            $Result=Db::execute(str_replace("INSERT","INSERT IGNORE",$AddDb));
+            $Result=Db::connect($db_config)->execute(str_replace("INSERT","INSERT IGNORE",$AddDb));
             return $Result;
         }
     }

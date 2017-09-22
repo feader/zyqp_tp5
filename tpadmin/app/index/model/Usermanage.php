@@ -2,9 +2,18 @@
 namespace app\index\model;
 use \think\Model;
 use \think\Db;
-
+use \think\Session;
 
 class Usermanage extends Tool{
+
+	protected $db_config;
+
+	public function __construct(){
+
+		$db_config = Session::get('db_config','db_config');
+
+		$this->db_config = $db_config;
+	}
 
 	/*
 	*获取某个用户的的信息
@@ -12,7 +21,7 @@ class Usermanage extends Tool{
 	*/ 
 	public function get_one_play_info($uid){
 
-		$res = Db::name('game_user')->where("uid=$uid")->find();
+		$res = Db::connect($this->db_config)->name('game_user')->where("uid=$uid")->find();
 		
 		return $res;
 	}
@@ -25,11 +34,11 @@ class Usermanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('game_user')->order('register_time desc')->paginate($page);
+			$res = Db::connect($this->db_config)->name('game_user')->order('register_time desc')->paginate($page);
 		
 		}else{
 
-			$res = Db::name('game_user')->where($where)->order('register_time desc')->paginate($page);
+			$res = Db::connect($this->db_config)->name('game_user')->where($where)->order('register_time desc')->paginate($page);
 
 		}
 				
@@ -44,7 +53,7 @@ class Usermanage extends Tool{
 
 		if(empty($where)){
 
-			$res = Db::view('agency_and_user','id,agency_id,action_time,unionid')
+			$res = Db::connect($this->db_config)->view('agency_and_user','id,agency_id,action_time,unionid')
 			    ->view('game_user','uid,username,dimond,sum_dimond,register_time,reg_ip','agency_and_user.unionid=game_user.unionid','LEFT')
 			    ->where('uid','not null')	
 			    ->where('unionid','not null')	
@@ -54,7 +63,7 @@ class Usermanage extends Tool{
 			
 		}else{
 
-			$res = Db::view('agency_and_user','id,agency_id,action_time,unionid')
+			$res = Db::connect($this->db_config)->view('agency_and_user','id,agency_id,action_time,unionid')
 			    ->view('game_user','uid,username,dimond,sum_dimond,register_time,reg_ip','agency_and_user.unionid=game_user.unionid','LEFT')
 			    ->where('uid','not null')			 
 			    ->where('unionid','not null')	
@@ -76,7 +85,7 @@ class Usermanage extends Tool{
 
 		if(empty($where)){
 		
-			$res = Db::view('agency_and_user','id,agency_id,action_time,unionid')
+			$res = Db::connect($this->db_config)->view('agency_and_user','id,agency_id,action_time,unionid')
 			    ->view('game_user','uid,username,dimond,sum_dimond,register_time,reg_ip','agency_and_user.agent_ip=game_user.reg_ip','LEFT')
 			    ->where('uid','not null')			 
 			    ->where('unionid','not null')			 
@@ -85,7 +94,7 @@ class Usermanage extends Tool{
 					  	
 		}else{
 
-			$res = Db::view('agency_and_user','id,agency_id,action_time,unionid')
+			$res = Db::connect($this->db_config)->view('agency_and_user','id,agency_id,action_time,unionid')
 			    ->view('game_user','uid,username,dimond,sum_dimond,register_time,reg_ip','agency_and_user.agent_ip=game_user.reg_ip','LEFT')
 			    ->where('uid','not null')			 
 			    ->where('unionid','not null')			 
@@ -105,7 +114,7 @@ class Usermanage extends Tool{
 	*/ 
 	public function get_system_setting($where){
 
-		$res = Db::name('system_setting')->field('setting_value')->where($where)->find();
+		$res = Db::connect($this->db_config)->name('system_setting')->field('setting_value')->where($where)->find();
 		
 		return $res['setting_value'];
 	}

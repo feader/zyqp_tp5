@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="get" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                                                                                                 
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <span class="input-group-addon">创建起始：</span>
+                                    <input type="text" class="input-sm form-control" name="date_begin" id="date_begin" value="{$Think.get.date_begin}">
+                                    <span class="input-group-addon">创建结束：</span>
+                                    <input type="text" class="input-sm form-control" name="date_end" id="date_end" value="{$Think.get.date_end}">
+                                </div>
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                                        
+                    <h2 class="sub-header">数据统计</h2>
+
+                    <h6>
+                        <p>{$acu}</p>
+                    </h6>
+                                             
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>                                   
+                                    <td>序号</td>
+                                    <td>时间</td>
+                                    <td>新增注册</td>       
+                                    <td>当天充值数</td>       
+                                    <td>当天消耗房卡数</td>                       
+                                    <td>日平均在线人数</td>                                             
+                                    <td>当日登录帐号数</td>                       
+                                    <td>总充值付费用户</td>                       
+                                    <td>历史注册总数</td>                       
+                                    <td>日活跃账号数</td>                       
+                                    <td>日活跃付费账号数</td>                       
+                                    <td>月活跃账号数</td>                       
+                                    <td>月活跃账付费号数</td>                       
+                                    <td>用户日平均在线时长（分）</td>                               
+                                    <td>活跃率</td>                       
+                                    <td>月付费用户</td>                       
+                                    <td>日付费用户</td>                       
+                                    <td>注册用户付费率（日）</td>                       
+                                    <td>平均在线付费率（日）</td>                       
+                                    <td>活跃用户付费率（日）</td>                      
+                                    <td>平均在线付费率（月）</td>                       
+                                    <td>活跃用户付费率（月）</td>                        
+                                    <td>活跃用户付费率（月）</td>                                          
+                                    <td>次留</td>             
+                                    <td>三留</td>             
+                                    <td>四留</td>             
+                                    <td>五留</td>             
+                                    <td>六留</td>             
+                                    <td>七留</td>             
+                                    <td>14留</td>             
+                                    <td>30留</td>                                                                                                        
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                            
+                                {volist name="all_info" id="vo" key="k"}
+                                <tr>                                                                       
+                                    <td>{$k}</td>
+                                    <td>{$vo.data_time}</td> 
+                                    <td>{$vo.register}</td>
+                                    <td>{$vo.total_charge_money}</td>                     
+                                    <td>{$vo.total_cost_dimond}</td>                     
+                                    <td>{$vo.acu}</td>                                                                                   
+                                    <td>{$vo.uv}</td>                                          
+                                    <td>{$vo.pu}</td>                                          
+                                    <td>{$vo.all_reg}</td>                                          
+                                    <td>{$vo.dau}</td>                                          
+                                    <td>{$vo.dau_apa}</td>                                          
+                                    <td>{$vo.mau}</td>                                          
+                                    <td>{$vo.mau_apa}</td>                                          
+                                    <td>{php}echo sprintf("%.2f", ($vo['dts'])/60);{/php}</td>
+                                    <td>{$vo.rhyl}</td>                                          
+                                    <td>{$vo.marpu}</td>                                          
+                                    <td>{$vo.darpu}</td>                                          
+                                    <td>{$vo.dau_reg_ffl}</td>                                          
+                                    <td>{$vo.dau_avg_online_ffl}</td>                                          
+                                    <td>{$vo.dau_nv_ffl}</td>                                          
+                                    <td>{$vo.mau_reg_ffl}</td>                                          
+                                    <td>{$vo.mau_avg_online_ffl}</td>                                          
+                                    <td>{$vo.mau_nv_ffl}</td>
+                                    <td>{$vo.second_retention}%</td>                     
+                                    <td>{$vo.third_retention}%</td>                     
+                                    <td>{$vo.fourth_retention}%</td>                     
+                                    <td>{$vo.fifth_retention}%</td>                     
+                                    <td>{$vo.sixth_retention}%</td>                     
+                                    <td>{$vo.seventh_retention}%</td>                     
+                                    <td>{$vo.fourteenth_retention}%</td>                     
+                                    <td>{$vo.thirty_retention}%</td>                                                                                                                 
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+                       
+        })
+
+        
+	</script>
+</body>
+</html>

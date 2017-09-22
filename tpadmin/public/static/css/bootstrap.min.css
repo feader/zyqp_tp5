@@ -1151,7 +1151,7 @@ hr {
 	font-size:12px
 }
 p {
-	margin:0 0 10px
+	margin:0 0 0px
 }
 .lead {
 	margin-bottom:20px;
@@ -3360,7 +3360,7 @@ select[multiple].input-group-sm>.form-control,select[multiple].input-group-sm>.i
 .nav>li>a {
 	position:relative;
 	display:block;
-	padding:10px 15px
+	padding:5px 10px
 }
 .nav>li>a:focus,.nav>li>a:hover {
 	text-decoration:none;

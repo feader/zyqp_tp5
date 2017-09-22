@@ -6,6 +6,15 @@ use \think\Db;
 
 class Login extends Controller{
 
+	private $database;
+
+	public function _initialize(){
+
+		// $database = config("database.database");
+		
+		// $this->database = $database;
+	}
+
 	/*
 	*登陆页
 	*/ 
@@ -35,7 +44,9 @@ class Login extends Controller{
 	   
 	    $admin_passwd = input('request.password');
 	    
-        $res = $this->login_handle($admin_name,$admin_passwd); 
+	    $db_num = input('request.db_num');
+	    
+        $res = $this->login_handle($admin_name,$admin_passwd,$db_num); 
 
 	    if($res){	    	         
 	    	
@@ -43,7 +54,7 @@ class Login extends Controller{
 
 	    }else{
 
-	    	Session::delete('admin_user','admin');
+	    	Session::delete('admin_user',$this->database.'_admin');
 
 	    	$this->error('登陆失败！','/login.html');
 
@@ -55,24 +66,29 @@ class Login extends Controller{
 	*登陆验证
 	*@$admin_name 用户名
 	*@$admin_passwd 用户密码
+	*@$db_num 数据库选项
 	*/ 
-    private function login_handle($admin_name,$admin_passwd){
+    private function login_handle($admin_name,$admin_passwd,$db_num){
 		
 		$where = array();
 	    
 	    $where['username'] = $admin_name;
 	    
 	    $where['passwd'] = md5($admin_passwd);
-
+	    
 	    $base = model('Base');
 	    
 	    $res = $base->get_admin_info($where);
+
+	    $db_config = \think\Config::get('db'.$db_num);
 	    
-	    Session::set('admin_user',$res['username'],'admin'); 
+	    Session::set('admin_user',$res['username'],$db_config['database'].'_admin'); 
 	   
-	    Session::set('admin_uid',$res['uid'],'admin'); 
+	    Session::set('admin_uid',$res['uid'],$db_config['database'].'_admin'); 
 	    
-	    Session::set('admin_group_id',$res['gid'],'admin');
+	    Session::set('admin_group_id',$res['gid'],$db_config['database'].'_admin');
+	    
+	    Session::set('db_config',$db_config,'db_config');
         
         return $res;
 
@@ -83,7 +99,9 @@ class Login extends Controller{
 	*/ 
 	public function logout(){
         
-        Session::clear('admin');
+        Session::clear($this->database.'_admin');
+       
+        Session::clear('db_config');
         
         $this->success('登出成功！','/login.html');
     

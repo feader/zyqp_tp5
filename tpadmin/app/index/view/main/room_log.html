@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="get" action="">
+                  
+                    <h2 class="sub-header">查询条件</h2>
+
+                        <div class="row placeholders">
+                                                                     
+                            <div class="col-xs-6 col-sm-3">
+                                <input type="text" placeholder="玩家UID" name="uid" value="{$Think.get.uid}" id='uid'><br/>                        
+                            </div>
+                                                
+                            <div class="col-xs-6 colsm-3 placeholder">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <span class="input-group-addon">创建起始：</span>
+                                    <input type="text" class="input-sm form-control" name="date_begin" id="date_begin" value="{$Think.get.date_begin}">
+                                    <span class="input-group-addon">创建结束：</span>
+                                    <input type="text" class="input-sm form-control" name="date_end" id="date_end" value="{$Think.get.date_end}">
+                                </div>
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    查询
+                                </button>
+                            </div> 
+
+                        </div>
+                    
+
+                    
+                    <h2 class="sub-header">房间记录</h2>
+                                             
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            
+                            <thead>
+                                <tr>
+                                    
+                                    <td>序号</td>
+                                    
+                                    <td>房间号</td>       
+                                    
+                                    <td>参与游戏玩家UID</td>       
+                                    
+                                    <td>开房时间</td>                             
+                                    
+                                    <td>结束时间</td>                             
+                                    
+                                    <td>盘数</td>                                                                   
+                                    
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+
+                                {volist name="all_info" id="vo" key="k"}
+                                <tr>
+                                                                       
+                                    <td>{$k}</td>
+                                    
+                                    <td>{$vo.room_id}</td>
+                                    
+                                    <td>                
+                                        {if condition="$vo.uids!=''"}{$vo.uids}
+                                        {else  /}无数据
+                                        {/if}    
+                                    </td>                     
+                                    
+                                    <td>{php}if (!empty($vo['action_time'])) echo date('Y-m-d H:i:s',$vo['action_time']) {/php}</td>                     
+                                    
+                                    <td>{php}if (!empty($vo['finish_time'])) echo date('Y-m-d H:i:s',$vo['finish_time']) {/php}</td>                     
+                                    
+                                    <td>
+                                        {if condition="$vo.play_times!=0"}{$vo.play_times}
+                                        {else  /}无数据
+                                        {/if}                                           
+                                    </td>                
+                                                                                                         
+                                    <td>{php}if (!empty($vo['create_time'])) echo date('Y-m-d H:i:s',$vo['create_time']) {/php}</td>
+                                   
+                                    <td>{php}if (!empty($vo['update_time'])) echo date('Y-m-d H:i:s',$vo['update_time']) {/php}</td>
+                                                                      
+                                </tr>
+                                {/volist}                                                                                                                                         
+                                                                                                                                                                                                                                   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        {$page}
+                    </div>
+                                                         
+                     <!-- endif tbl -->
+
+                </form>
+            </div>
+            <!-- endif form -->
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    {include file="public/public_js" /}
+
+    <script>
+    	$(document).ready(function() {
+          
+            $('.input-daterange').datepicker({
+                language: "zh-CN",
+                //endDate: "+0d",
+                startDate: "-2y",
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+                format: "yyyy-mm-dd",
+            })
+                       
+        })
+
+        $('#daochu').click(function(){
+            var uid = $('#uid').val();
+            var handler = $('#handler').val();
+            var date_begin = $('#date_begin').val();
+            var date_end = $('#date_end').val();
+            var url = '/user_complain_down_excel?uid='+uid+'&handler='+handler+'&date_begin='+date_begin+'&date_end='+date_end;
+            window.location.href = url; 
+        })
+	</script>
+</body>
+</html>

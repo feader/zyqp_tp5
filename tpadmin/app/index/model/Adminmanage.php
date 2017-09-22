@@ -2,16 +2,26 @@
 namespace app\index\model;
 use \think\Model;
 use \think\Db;
-
+use \think\Session;
 
 class Adminmanage extends Tool{
+
+	//protected $db_config;
+
+	public function __construct(){
+
+		// $db_config = Session::get('db_config','db_config');
+
+		// $this->db_config = $db_config;
+
+	}
 
 	/*
 	*获取所有管理员用户的数据
 	*/ 
-	public static function get_all_admin_list($where){
+	public static function get_all_admin_list($where,$db_config){
 		
-		$all_admin_info = self::get_all_admin_info($where);
+		$all_admin_info = self::get_all_admin_info($where,$db_config);
 		
 		return $all_admin_info;
 	
@@ -20,9 +30,9 @@ class Adminmanage extends Tool{
 	/*
 	*获取用户的数据
 	*/ 
-	public static function get_all_admin_info($where){
+	public static function get_all_admin_info($where,$db_config){
 		
-		$res = Db::name('admin_user')->where($where)->paginate(10);
+		$res = Db::connect($db_config)->name('admin_user')->where($where)->paginate(10);
 		
 		return $res;
 	
@@ -32,13 +42,18 @@ class Adminmanage extends Tool{
 	*获取等级比自己低的用户的数据
 	*@$gid 用户组
 	*/ 
-	public static function below_level_admin_list($where,$gid){
+	public static function below_level_admin_list($where,$gid,$db_config){
 		
 		if(!empty($where)){
+			
 			$where['gid'] = ['>',$gid];
-			$res = Db::name('admin_user')->where($where)->paginate(10);
+			
+			$res = Db::connect($db_config)->name('admin_user')->where($where)->paginate(10);
+		
 		}else{
-			$res = Db::name('admin_user')->where("gid>$gid")->paginate(10);
+			
+			$res = Db::connect($db_config)->name('admin_user')->where("gid>$gid")->paginate(10);
+		
 		}
 	
 		return $res;
@@ -49,9 +64,9 @@ class Adminmanage extends Tool{
 	*获取等级比自己低的用户的数据
 	*@$gid 用户组
 	*/ 
-	public static function get_all_admin_group(){
+	public static function get_all_admin_group($db_config){
 			
-		$res = Db::name('group')->field('gid')->select();
+		$res = Db::connect($db_config)->name('group')->field('gid')->select();
 		
 		return $res;
 	
@@ -61,9 +76,9 @@ class Adminmanage extends Tool{
 	*获取某个用户的数据
 	*@$uid 用户uid
 	*/ 
-	public static function get_one_admin_info($uid){
+	public static function get_one_admin_info($uid,$db_config){
 		
-		$res = Db::name('admin_user')->where("uid=$uid")->find();
+		$res = Db::connect($db_config)->name('admin_user')->where("uid=$uid")->find();
 		
 		return $res;
 	
@@ -72,9 +87,9 @@ class Adminmanage extends Tool{
 	/*
 	*获取线下赛数据
 	*/ 
-	public static function get_offline_play_setting_info(){
+	public static function get_offline_play_setting_info($db_config){
 		
-		$res = Db::name('offline_play_setting')->find(1);
+		$res = Db::connect($db_config)->name('offline_play_setting')->find(1);
 		
 		return $res;
 	
@@ -85,7 +100,7 @@ class Adminmanage extends Tool{
 	*@$id 用户uid
 	*@$username 管理员名
 	*/ 
-	public static function del_admin($id,$username){
+	public static function del_admin($id,$username,$db_config){
 		
 		$where = array();
 		
@@ -111,7 +126,7 @@ class Adminmanage extends Tool{
 		
 			}
 
-			$del_res = Db::name('admin_user')->where($where)->delete();
+			$del_res = Db::connect($db_config)->name('admin_user')->where($where)->delete();
 
 			if($del_res){
 
@@ -145,7 +160,7 @@ class Adminmanage extends Tool{
 	*@$data 用户数据
 	*@$where 更新依据
 	*/ 
-	public static function handle_admin_add($data,$where){
+	public static function handle_admin_add($data,$where,$db_config){
 		
 		$res = array();
 		
@@ -153,7 +168,7 @@ class Adminmanage extends Tool{
 		
 		$field = 'uid,username';
 		
-		$check = self::check_info_exists($table,$field,$where);
+		$check = self::check_info_exists($table,$field,$where,$db_config);
 		
 		if($check){
 		
@@ -169,9 +184,9 @@ class Adminmanage extends Tool{
 						
 		}else{
 			
-			//$insert_res = self::insert_handle($table,$data);
+			//$insert_res = self::insert_handle($table,$data,$db_config);
 			
-			$insert_res = self::insert_DbIns($table,$data);
+			$insert_res = self::insert_DbIns($table,$data,$db_config);
 
 			if($insert_res){
 
@@ -199,7 +214,7 @@ class Adminmanage extends Tool{
 	*@$data 用户数据
 	*@$where 更新依据
 	*/ 
-	public static function handle_admin_info_update($data,$where){
+	public static function handle_admin_info_update($data,$where,$db_config){
 		
 		$res = array();
 		
@@ -207,7 +222,7 @@ class Adminmanage extends Tool{
 		
 		$field = 'uid,passwd';
 		
-		$check = self::check_info_exists($table,$field,$where);
+		$check = self::check_info_exists($table,$field,$where,$db_config);
 		
 		if($check){
 
@@ -225,7 +240,7 @@ class Adminmanage extends Tool{
 
 			}
 					
-			$update_res = self::update_handle($table,$where,$data);
+			$update_res = self::update_handle($table,$where,$data,$db_config);
 
 			if($update_res){
 
@@ -258,7 +273,7 @@ class Adminmanage extends Tool{
 	*@$data 用户数据
 	*@$where 更新依据
 	*/ 
-	public static function handle_system_value_update($data,$where){
+	public static function handle_system_value_update($data,$where,$db_config){
 		
 		$res = array();
 		
@@ -266,7 +281,7 @@ class Adminmanage extends Tool{
 		
 		$field = 'id,setting_value';
 		
-		$check = self::check_info_exists($table,$field,$where);		
+		$check = self::check_info_exists($table,$field,$where,$db_config);		
 		
 		if($check){
 		
@@ -280,7 +295,7 @@ class Adminmanage extends Tool{
 		
 			}
 
-			$update_res = self::update_handle($table,$where,$data);
+			$update_res = self::update_handle($table,$where,$data,$db_config);
 
 			if($update_res){
 
@@ -313,7 +328,7 @@ class Adminmanage extends Tool{
 	*@$data 线下比赛数据
 	*@$where 更新依据
 	*/ 
-	public static function handle_offline_play_setting_info_update($data,$where){
+	public static function handle_offline_play_setting_info_update($data,$where,$db_config){
 		
 		$res = array();
 		
@@ -321,11 +336,11 @@ class Adminmanage extends Tool{
 		
 		$field = 'id';
 		
-		$check = self::check_info_exists($table,$field,$where);
+		$check = self::check_info_exists($table,$field,$where,$db_config);
 		
 		if($check){
 		
-			$update_res = self::update_handle($table,$where,$data);
+			$update_res = self::update_handle($table,$where,$data,$db_config);
 
 			if($update_res){
 
@@ -345,7 +360,7 @@ class Adminmanage extends Tool{
 			
 			$data['id'] = 1;
 
-			$insert_res = self::insert_handle($table,$data);
+			$insert_res = self::insert_handle($table,$data,$db_config);
 			
 			$res['code'] = 0;
 				
@@ -360,9 +375,9 @@ class Adminmanage extends Tool{
 	/*
 	*获取系统参数
 	*/ 
-	public static function get_system_setting_info($table,$field,$where){
+	public static function get_system_setting_info($table,$field,$where,$db_config){
 			
-		$res = self::check_info_exists($table,$field,$where);
+		$res = self::check_info_exists($table,$field,$where,$db_config);
 		
 		return $res['setting_value'];
 	
@@ -371,9 +386,9 @@ class Adminmanage extends Tool{
 	/*
 	*获取参数列表(id=1的除外，id=1的是代理首页公告，涉及排版，单独编辑)
 	*/ 
-	public static function get_all_system_setting_info(){
+	public static function get_all_system_setting_info($db_config){
 		
-		$res = Db::name('system_setting')->where('id!=1')->select();
+		$res = Db::connect($db_config)->name('system_setting')->where('id!=1')->select();
 		
 		return $res;
 	
@@ -382,15 +397,15 @@ class Adminmanage extends Tool{
 	/*
 	*获取组群信息
 	*/ 
-	public static function get_all_admin_group_info(){
+	public static function get_all_admin_group_info($db_config){
 		
-		$res = Db::name('group')->select();
+		$res = Db::connect($db_config)->name('group')->select();
 
 		foreach ($res as $k => $v) {
 			
 			$gid = $v['gid'];
 			
-			$res1 = Db::name('admin_user')->where("gid='$gid'")->select();
+			$res1 = Db::connect($db_config)->name('admin_user')->where("gid='$gid'")->select();
 			
 			$admin_users = '';
 			
@@ -409,9 +424,9 @@ class Adminmanage extends Tool{
 	/*
 	*获取组群信息
 	*/ 
-	public static function get_one_admin_group_info($gid){
+	public static function get_one_admin_group_info($gid,$db_config){
 		
-		$res = Db::name('group')->find($gid);
+		$res = Db::connect($db_config)->name('group')->find($gid);
 
 		return $res;
 	
@@ -483,7 +498,7 @@ class Adminmanage extends Tool{
 	*@$data 用户数据
 	*@$where 更新依据
 	*/ 
-	public static function handle_admin_group_info_update($data,$where){
+	public static function handle_admin_group_info_update($data,$where,$db_config){
 		
 		$res = array();
 		
@@ -491,11 +506,11 @@ class Adminmanage extends Tool{
 		
 		$field = 'gid';
 		
-		$check = self::check_info_exists($table,$field,$where);
+		$check = self::check_info_exists($table,$field,$where,$db_config);
 		
 		if($check){
 					
-			$update_res = self::update_handle($table,$where,$data);
+			$update_res = self::update_handle($table,$where,$data,$db_config);
 
 			if($update_res){
 
@@ -528,7 +543,7 @@ class Adminmanage extends Tool{
 	*@$data 用户数据
 	*@$where 更新依据
 	*/ 
-	public static function handle_admin_group_info_add($data,$where){
+	public static function handle_admin_group_info_add($data,$where,$db_config){
 		
 		$res = array();
 		
@@ -536,11 +551,11 @@ class Adminmanage extends Tool{
 		
 		$field = 'gid,username';
 		
-		$check = self::check_info_exists($table,$field,$where);
+		$check = self::check_info_exists($table,$field,$where,$db_config);
 		
 		if($check){
 					
-			$insert_res = self::insert_handle('group',$data);
+			$insert_res = self::insert_handle('group',$data,$db_config);
 
 			if($insert_res){
 
@@ -573,7 +588,7 @@ class Adminmanage extends Tool{
 	*@ $id 用户uid
 	*@ $username 管理员名
 	*/ 
-	public static function admin_group_del($gid){
+	public static function admin_group_del($gid,$db_config){
 		
 		$where = array();
 		
@@ -583,7 +598,7 @@ class Adminmanage extends Tool{
 		
 		$field = 'gid';
 		
-		$check = self::check_info_exists($table,$field,$where);
+		$check = self::check_info_exists($table,$field,$where,$db_config);
 		
 		if($check){
 		
@@ -597,7 +612,7 @@ class Adminmanage extends Tool{
 		
 			}
 
-			$check_admin = self::check_info_exists('admin_user','uid',$where);
+			$check_admin = self::check_info_exists('admin_user','uid',$where,$db_config);
 
 			if(!empty($check_admin)){
 				
@@ -609,7 +624,7 @@ class Adminmanage extends Tool{
 
 			}
 
-			$del_res = Db::name('group')->where($where)->delete();
+			$del_res = Db::connect($db_config)->name('group')->where($where)->delete();
 
 			if($del_res){
 

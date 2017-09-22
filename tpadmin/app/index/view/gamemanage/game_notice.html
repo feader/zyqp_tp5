@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{include file="public/header" /}
+
+<body>
+
+    {include file="public/top" /}
+
+    <div class="container-fluid">
+        
+        <div class="row">
+            
+            {include file="public/left_menus" /}
+            
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                       
+                    <form id="selector" method="post" action="/game_notice.html">
+                   
+                        <h2 class="sub-header">代理首页编辑</h2>
+                        
+                        <p align="center">公告详细</p>
+
+                        <div class="row placeholders">
+                            
+                            <div class="col-xs-6 colsm-3 placeholder" style="width:100%">
+                                
+                                <textarea name="setting_value" id="editor_id" cols="100" rows="20" style="width:100%">
+                                    {$game_notice_info.setting_value}
+                                </textarea>
+            
+                                <input type="hidden" name="id" value="{$game_notice_info.id}">                                 
+                            </div>
+                            
+                            <div clss="col-xs-6 colsm-3 placeholder">
+                                <button type="submit" class="btn btn-default" aria-label="Left Align" id="commit" >
+                                    保存修改
+                                </button>
+                            </div> 
+                        </div>
+                                              
+                        <!-- endif tbl -->
+
+                    </form>
+            </div>        
+            <!-- endif form -->
+        </div>
+
+    </div>
+    <!-- Bootstrap core JavaScript==================================================- ->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+{include file="public/public_js" /} 
+<script src="__PUBLIC__/js/kindeditor/kindeditor-all-min.js"></script>
+<script src="__PUBLIC__/js/kindeditor/lang/zh_CN.js"></script>          
+<script>
+    $('#commit').click(function(){
+       
+        $('#selector').submit();
+       
+    }) 
+
+    KindEditor.ready(function(K) {  
+        window.editor = K.create('#editor_id');  
+    });     
+
+</script>
+</body>
+</html>

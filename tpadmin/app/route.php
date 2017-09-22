@@ -23,6 +23,8 @@ return [
     'logout' => 'index/login/logout',
 
     'total_view' => 'index/main/total_view',  
+    'data_count' => 'index/main/data_count',  
+    'room_log' => 'index/main/room_log',  
     'test' => 'index/main/test',
 
     'admin_list' => 'index/adminmanage/admin_list',    
@@ -64,6 +66,7 @@ return [
     'dimond_used' => 'index/gamemanage/dimond_used', 
     'admin_action_log' => 'index/gamemanage/admin_action_log', 
     'offline_player_list' => 'index/gamemanage/offline_player_list', 
+    'game_notice' => 'index/gamemanage/game_notice', 
     
     'dimond_log_down_excel' => 'index/gamemanage/dimond_log_down_excel',
     'user_complain_down_excel' => 'index/gamemanage/user_complain_down_excel',
@@ -87,7 +90,7 @@ return [
     'agency_list_down_excel' => 'index/agencymanage/agency_list_down_excel',
 
     'agency_login' => 'agency/login/index',
-
+    'agency_sign_up' => 'agency/login/agency_sign_up',
 
 
 

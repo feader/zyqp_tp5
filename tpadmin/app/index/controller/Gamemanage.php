@@ -8,10 +8,17 @@ use \think\Paginator;
 use app\index\model\Gamemanage as gmanage;
 
 class Gamemanage extends Auth{
+
+    protected $db_config;
+
 	/*
 	*根据用户权限自动加载左侧菜单栏并判断当前选择的是哪个菜单
 	*/ 
 	public function _initialize(){
+
+        $db_config = Session::get('db_config','db_config');
+        
+        $this->db_config = $db_config;
 
 		$this->jump_login($this->is_login());
         
@@ -19,10 +26,10 @@ class Gamemanage extends Auth{
         
         $this->set_action($view);
 
-        $gid = Session::get('admin_group_id','admin');
+        $gid = Session::get('admin_group_id',$this->db_config['database'].'_admin');
 
         $this->handle_power($gid,$view);
-               
+  
     }
 
     /*
@@ -52,9 +59,9 @@ class Gamemanage extends Auth{
 			  		
         }
 
-        $all_cost = Db::name("everyday_user_dimond_log")->order('write_time desc')->sum('everyday_total_use');
+        $all_cost = Db::connect($this->db_config)->name("everyday_user_dimond_log")->order('write_time desc')->sum('everyday_total_use');
 
-        $all_info = $gamemanage->get_all_dimond_log_info($where,365);
+        $all_info = $gamemanage->get_all_dimond_log_info($where,365,$this->db_config);
 
         $everyday_total_use = 0;
 
@@ -95,7 +102,7 @@ class Gamemanage extends Auth{
 			  		
         }
 
-        $all_info = Db::name("everyday_user_dimond_log")->field('date_time,everyday_total_use')->where($where)->order('write_time desc')->select();
+        $all_info = Db::connect($this->db_config)->name("everyday_user_dimond_log")->field('date_time,everyday_total_use')->where($where)->order('write_time desc')->select();
 
         $header=['日期','每日钻石消耗'];
 
@@ -146,7 +153,7 @@ class Gamemanage extends Auth{
 			  		
         }
        
-        $all_info = $gamemanage->get_all_user_complain_info($where,100);
+        $all_info = $gamemanage->get_all_user_complain_info($where,100,$this->db_config);
 
         $page = $all_info->render();	
 		
@@ -189,7 +196,7 @@ class Gamemanage extends Auth{
 			  		
         }
 
-        $all_info = Db::name("user_complain")->field('uid,contact_way,status,content,call_back,handler,create_time,update_time')->where($where)->order(['create_time'=>'desc'])->select();
+        $all_info = Db::connect($this->db_config)->name("user_complain")->field('uid,contact_way,status,content,call_back,handler,create_time,update_time')->where($where)->order(['create_time'=>'desc'])->select();
 
         foreach ($all_info as $k => $v) {
         	
@@ -244,9 +251,9 @@ class Gamemanage extends Auth{
 			  		
         }
        
-        $all_info = $gamemanage->get_all_dimond_used_info($where,100);
+        $all_info = $gamemanage->get_all_dimond_used_info($where,100,$this->db_config);
 
-        $all_dimond_used = Db::name("user_dimond_log")->order('use_time desc')->sum('use_dimond');
+        $all_dimond_used = Db::connect($this->db_config)->name("user_dimond_log")->order('use_time desc')->sum('use_dimond');
 
         $page = $all_info->render();	
 		
@@ -285,7 +292,7 @@ class Gamemanage extends Auth{
 			  		
         }
 
-        $all_info = Db::name("user_dimond_log")->field('uid,use_dimond,use_time')->where($where)->order(['use_time'=>'desc'])->select();
+        $all_info = Db::connect($this->db_config)->name("user_dimond_log")->field('uid,use_dimond,use_time')->where($where)->order(['use_time'=>'desc'])->select();
 
         foreach ($all_info as $k => $v) {
         	
@@ -348,7 +355,7 @@ class Gamemanage extends Auth{
 			  		
         }
        
-        $all_info = $gamemanage->get_all_ban_log_info($where,100);
+        $all_info = $gamemanage->get_all_ban_log_info($where,100,$this->db_config);
 
         $page = $all_info->render();	
 		
@@ -397,7 +404,7 @@ class Gamemanage extends Auth{
 			  		
         }
 
-        $all_info = Db::name("ban_log")->field('uid,content,handler,action_type,action_time')->where($where)->order(['action_time'=>'desc'])->select();
+        $all_info = Db::connect($this->db_config)->name("ban_log")->field('uid,content,handler,action_type,action_time')->where($where)->order(['action_time'=>'desc'])->select();
 
         foreach ($all_info as $k => $v) {
         	
@@ -471,7 +478,7 @@ class Gamemanage extends Auth{
 			  		
         }
        
-        $all_info = $gamemanage->get_all_offline_player_list_info($where,100);
+        $all_info = $gamemanage->get_all_offline_player_list_info($where,100,$this->db_config);
 
         $page = $all_info->render();	
 		
@@ -514,7 +521,7 @@ class Gamemanage extends Auth{
 			  		
         }
 
-        $all_info = Db::view('offline_play','uid,create_time')
+        $all_info = Db::connect($this->db_config)->view('offline_play','uid,create_time')
 			    ->view('game_user','username','offline_play.uid=game_user.uid','LEFT')	
 			    ->where($where)			
 			    ->order(['create_time'=>'desc'])
@@ -535,5 +542,78 @@ class Gamemanage extends Auth{
         self::excel('线下赛',$header,$all_info,$setWidth);
         
 	}
+
+    /*
+    *游戏公告
+    */ 
+    public function game_notice(){
+        
+        $view = $this->view;
+       
+        $view->header_title = '游戏公告';
+
+        $post = input('post.');
+
+        $gamemanage = new gmanage();
+
+        if(!empty($post)){
+
+            $data = array();
+            
+            $where = array();
+
+            $data['setting_value'] = $post['setting_value'];
+
+            $where['id'] = $post['id'];
+
+            $res = $gamemanage->handle_game_note_info_update($data,$where,$this->db_config);
+
+            if($res){
+
+                $interface_port_num = $gamemanage->get_system_setting_info('system_setting','setting_value',"setting_name='interface_port_num'",$this->db_config);
+
+                $web_server = $gamemanage->get_system_setting_info('system_setting','setting_value',"setting_name='web_server'",$this->db_config);
+
+                $curl = $this->game_notice_setting_curl($web_server,'gm/set_billboard_content',$data,$interface_port_num);
+
+                $this->success($res['msg'],'/game_notice.html');
+            
+            }else{
+                
+                $this->error($res['msg'],'/game_notice.html');
+            
+            }
+                    
+        }
+
+        $game_notice_info = $gamemanage->get_game_notice_info($this->db_config);
+
+        $view->game_notice_info = $game_notice_info; 
+                                  
+        // 模板输出
+        return $this->fetch();
+
+    }
+
+    /*
+    *线下赛设置
+    */
+    public function game_notice_setting_curl($web_server,$part,$data,$port){
+        $content = $data['setting_value'];
+        $url = $web_server.':'.$port.'/'.$part."?content=$content";
+        //var_dump($url);die;
+        $ch = curl_init();
+        //设置选项，包括URL
+        curl_setopt($ch, CURLOPT_URL, $url);    
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        //执行并获取HTML文档内容
+        $output = curl_exec($ch);
+        //释放curl句柄
+        curl_close($ch);
+        //打印获得的数据       
+        return $output;
+    }
+
 
 }

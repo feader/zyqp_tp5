@@ -2,10 +2,18 @@
 namespace app\index\model;
 use \think\Model;
 use \think\Db;
-
+use \think\Session;
 
 class Rechargemanage extends Tool{
 	
+	protected $db_config;
+
+	public function __construct(){
+
+		$db_config = Session::get('db_config','db_config');
+
+		$this->db_config = $db_config;
+	}
 
 	/*
 	*获取所有充值的信息
@@ -14,11 +22,11 @@ class Rechargemanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('recharge_log')->order(['order_status'=>'desc','create_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('recharge_log')->order(['order_status'=>'desc','create_time'=>'desc'])->paginate($page);
 		
 		}else{
 
-			$res = Db::name('recharge_log')->where($where)->order(['order_status'=>'desc','create_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('recharge_log')->where($where)->order(['order_status'=>'desc','create_time'=>'desc'])->paginate($page);
 
 		}
 				
@@ -32,11 +40,11 @@ class Rechargemanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('agency_sell_to_agency')->order('create_time desc')->paginate($page);
+			$res = Db::connect($this->db_config)->name('agency_sell_to_agency')->order('create_time desc')->paginate($page);
 		
 		}else{
 
-			$res = Db::name('agency_sell_to_agency')->where($where)->order('create_time desc')->paginate($page);
+			$res = Db::connect($this->db_config)->name('agency_sell_to_agency')->where($where)->order('create_time desc')->paginate($page);
 
 		}
 				
@@ -50,11 +58,11 @@ class Rechargemanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('sell_log')->order('action_time desc')->paginate($page);
+			$res = Db::connect($this->db_config)->name('sell_log')->order('action_time desc')->paginate($page);
 		
 		}else{
 
-			$res = Db::name('sell_log')->where($where)->order('action_time desc')->paginate($page);
+			$res = Db::connect($this->db_config)->name('sell_log')->where($where)->order('action_time desc')->paginate($page);
 
 		}
 				
@@ -68,11 +76,11 @@ class Rechargemanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('everyday_total_dimond_log')->paginate($page);
+			$res = Db::connect($this->db_config)->name('everyday_total_dimond_log')->paginate($page);
 		
 		}else{
 
-			$res = Db::name('everyday_total_dimond_log')->where($where)->paginate($page);
+			$res = Db::connect($this->db_config)->name('everyday_total_dimond_log')->where($where)->paginate($page);
 
 		}
 				
@@ -82,7 +90,7 @@ class Rechargemanage extends Tool{
 
 	public function get_sum($table,$name,$where){
 		
-		$res =  Db::name($table)->where($where)->sum($name);
+		$res = Db::connect($this->db_config)->name($table)->where($where)->sum($name);
 
 		return $res ? $res : 0;
 	}

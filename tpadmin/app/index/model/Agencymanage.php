@@ -2,10 +2,19 @@
 namespace app\index\model;
 use \think\Model;
 use \think\Db;
-
+use \think\Session;
 
 class Agencymanage extends Tool{
 
+	protected $db_config;
+
+	public function __construct(){
+
+		$db_config = Session::get('db_config','db_config');
+
+		$this->db_config = $db_config;
+	}
+	
 	/*
 	*获取所有代理的信息
 	*/ 
@@ -13,11 +22,11 @@ class Agencymanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('agency')->order(['register_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('agency')->order(['register_time'=>'desc'])->paginate($page);
 		
 		}else{
 
-			$res = Db::name('agency')->where($where)->order(['register_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('agency')->where($where)->order(['register_time'=>'desc'])->paginate($page);
 
 		}
 				
@@ -31,7 +40,7 @@ class Agencymanage extends Tool{
 	*/ 
 	public function get_one_agency_info($where){
 		
-		$res = Db::name('agency')->where($where)->find();
+		$res = Db::connect($this->db_config)->name('agency')->where($where)->find();
 		
 		return $res;
 	
@@ -127,7 +136,7 @@ class Agencymanage extends Tool{
 		
 			}
 
-			$del_res = Db::name('agency')->where($where)->delete();
+			$del_res = Db::connect($this->db_config)->name('agency')->where($where)->delete();
 
 			if($del_res){
 
@@ -161,11 +170,11 @@ class Agencymanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('agency_bank_info')->paginate($page);
+			$res = Db::connect($this->db_config)->name('agency_bank_info')->paginate($page);
 		
 		}else{
 
-			$res = Db::name('agency_bank_info')->where($where)->paginate($page);
+			$res = Db::connect($this->db_config)->name('agency_bank_info')->where($where)->paginate($page);
 
 		}
 				
@@ -178,7 +187,7 @@ class Agencymanage extends Tool{
 	*/ 
 	public function get_one_agency_bank_info($where){
 		
-		$res = Db::name('agency_bank_info')->where($where)->find();
+		$res = Db::connect($this->db_config)->name('agency_bank_info')->where($where)->find();
 		
 		return $res;
 	
@@ -232,9 +241,9 @@ class Agencymanage extends Tool{
 	/*
 	*获取代理首页公告
 	*/ 
-	public function get_index_note_info($table,$field,$where){
+	public function get_index_note_info($table,$field,$where,$db_config){
 			
-		$res = self::check_info_exists($table,$field,$where);
+		$res = self::check_info_exists($table,$field,$where,$db_config);
 		
 		return $res;
 	
@@ -302,11 +311,11 @@ class Agencymanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('agency_get_dimond_back_log')->order(['create_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('agency_get_dimond_back_log')->order(['create_time'=>'desc'])->paginate($page);
 		
 		}else{
 
-			$res = Db::name('agency_get_dimond_back_log')->where($where)->order(['create_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('agency_get_dimond_back_log')->where($where)->order(['create_time'=>'desc'])->paginate($page);
 
 		}
 				
@@ -320,11 +329,11 @@ class Agencymanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('money_back_log')->order(['handle_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('money_back_log')->order(['handle_time'=>'desc'])->paginate($page);
 		
 		}else{
 
-			$res = Db::name('money_back_log')->where($where)->order(['handle_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('money_back_log')->where($where)->order(['handle_time'=>'desc'])->paginate($page);
 
 		}
 				
@@ -338,11 +347,11 @@ class Agencymanage extends Tool{
 
 		if(empty($where)){
 			
-			$res = Db::name('every_month_money_back')->order(['back_create_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('every_month_money_back')->order(['back_create_time'=>'desc'])->paginate($page);
 		
 		}else{
 
-			$res = Db::name('every_month_money_back')->where($where)->order(['back_create_time'=>'desc'])->paginate($page);
+			$res = Db::connect($this->db_config)->name('every_month_money_back')->where($where)->order(['back_create_time'=>'desc'])->paginate($page);
 
 		}
 				

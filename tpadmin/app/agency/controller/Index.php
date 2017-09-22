@@ -8,7 +8,7 @@ class Index extends Basecommon{
     *首页
     */ 
     public function index(){
-        echo 123;die;
+
         $check = $this->is_login();
 
         if($check){
@@ -20,6 +20,7 @@ class Index extends Basecommon{
             $this->redirect('/agency_login.html');          
         
         } 	   	
+    
     }
        
 }

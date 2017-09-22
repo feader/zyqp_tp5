@@ -8,10 +8,17 @@ use \think\Paginator;
 use app\index\model\Rechargemanage as rmanage;
 
 class Rechargemanage extends Auth{
+
+    protected $db_config;
+    
 	/*
 	*根据用户权限自动加载左侧菜单栏并判断当前选择的是哪个菜单
 	*/ 
 	public function _initialize(){
+
+        $db_config = Session::get('db_config','db_config');
+        
+        $this->db_config = $db_config;
 
 		$this->jump_login($this->is_login());
         
@@ -19,7 +26,7 @@ class Rechargemanage extends Auth{
         
         $this->set_action($view);
 
-        $gid = Session::get('admin_group_id','admin');
+        $gid = Session::get('admin_group_id',$this->db_config['database'].'_admin');
 
         $this->handle_power($gid,$view);
                
@@ -70,7 +77,7 @@ class Rechargemanage extends Auth{
 			  		
         }
 
-        $all_recharge = Db::name("recharge_log")->where('order_status=1')->sum('money_number');
+        $all_recharge = Db::connect($this->db_config)->name("recharge_log")->where('order_status=1')->sum('money_number');
 
         $all_info = $rechargemanage->get_all_user_recharge_info($where,100);
 
@@ -123,7 +130,7 @@ class Rechargemanage extends Auth{
 			  		
         }
 
-        $all_info = Db::name("recharge_log")->field('uid,order_id,alipay_order_id,money_number,dimond_number,create_time,finish_time,pay_way,order_status')->where($where)->order(['order_status'=>'desc','create_time'=>'desc'])->select();
+        $all_info = Db::connect($this->db_config)->name("recharge_log")->field('uid,order_id,alipay_order_id,money_number,dimond_number,create_time,finish_time,pay_way,order_status')->where($where)->order(['order_status'=>'desc','create_time'=>'desc'])->select();
 
         foreach ($all_info as $k => $v) {
         	
@@ -176,7 +183,7 @@ class Rechargemanage extends Auth{
 			  		
         }
 
-        $all_recharge = Db::name("everyday_total_dimond_log")->sum('today_total_dimond');
+        $all_recharge = Db::connect($this->db_config)->name("everyday_total_dimond_log")->sum('today_total_dimond');
 
         $all_info = $rechargemanage->get_all_recharge_query_info($where,100);
 
@@ -307,7 +314,7 @@ class Rechargemanage extends Auth{
 			  		
         }
 
-        $all_info = Db::name("agency_sell_to_agency")->field('sell_agency_uid,buy_agency_uid,dimond_num,create_time')->where($where)->select();
+        $all_info = Db::connect($this->db_config)->name("agency_sell_to_agency")->field('sell_agency_uid,buy_agency_uid,dimond_num,create_time')->where($where)->select();
 
         foreach ($all_info as $k => $v) {
         	
@@ -440,7 +447,7 @@ class Rechargemanage extends Auth{
 			  		
         }
 
-        $all_info = Db::name("sell_log")->field('seller_uid,buyer_uid,buyer_name,dimond_num,action_time')->where($where)->select();
+        $all_info = Db::connect($this->db_config)->name("sell_log")->field('seller_uid,buyer_uid,buyer_name,dimond_num,action_time')->where($where)->select();
 
         foreach ($all_info as $k => $v) {
         	

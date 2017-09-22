@@ -11,10 +11,16 @@ use PHPExcel;
 
 class Usermanage extends Auth{
 
+	protected $db_config;
+
 	/*
 	*根据用户权限自动加载左侧菜单栏并判断当前选择的是哪个菜单
 	*/ 
 	public function _initialize(){
+
+		$db_config = Session::get('db_config','db_config');
+        
+        $this->db_config = $db_config;
 
 		$this->jump_login($this->is_login());
         
@@ -22,10 +28,10 @@ class Usermanage extends Auth{
         
         $this->set_action($view);
 
-        $gid = Session::get('admin_group_id','admin');
+        $gid = Session::get('admin_group_id',$this->db_config['database'].'_admin');
 
         $this->handle_power($gid,$view);
-               
+     
     }
 
     /*
@@ -74,7 +80,7 @@ class Usermanage extends Auth{
 
 		$uid = $get['uid'];
 
-		$admin_user = Session::get('admin_user','admin');
+		$admin_user = Session::get('admin_user',$this->database.'_admin');
 
 		$log_data = $this->get_action_content($part);
 
