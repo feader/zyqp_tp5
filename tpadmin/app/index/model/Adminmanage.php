@@ -388,7 +388,7 @@ class Adminmanage extends Tool{
 	*/ 
 	public static function get_all_system_setting_info($db_config){
 		
-		$res = Db::connect($db_config)->name('system_setting')->where('id!=1')->select();
+		$res = Db::connect($db_config)->name('system_setting')->where('id not in(1,10)')->select();
 		
 		return $res;
 	

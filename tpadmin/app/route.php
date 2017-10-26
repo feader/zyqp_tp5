@@ -89,7 +89,11 @@ return [
     'agency_del/:id/:uid' => ['index/agencymanage/agency_del',['method' => 'get']],    
     'agency_list_down_excel' => 'index/agencymanage/agency_list_down_excel',
 
-    'agency_login' => 'agency/login/index',
+    'user_complain_input/:db_id/:uid' => ['index/complain/user_complain_input',['method' => 'get']],
+    'user_complain_file' => 'index/complain/user_complain_file',
+    'user_complain_save' => 'index/complain/user_complain_save',
+
+    'agency_login/:did' => ['agency/login/index',['method' => 'get']],
     'agency_sign_up' => 'agency/login/agency_sign_up',
 
 

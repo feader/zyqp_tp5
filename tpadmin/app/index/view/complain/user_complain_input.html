@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>投诉建议</title>
+
+<link rel="stylesheet" href="__PUBLIC__/css/zyUpload.css" type="text/css">
+	
+<script type="text/javascript" src="__PUBLIC__/js/jquery-2.0.0.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<style type="text/css">
+
+#all {text-align:left;margin-left:4px; line-height:1;}
+#nodes {width:100%; float:left;border:1px #ccc solid;}
+#result {width: 100%; height:100%; clear:both; border:1px #ccc solid;}
+
+</style>
+
+</head>
+ <body>
+ <div id="position">投诉建议</div>
+	<form action="/user_complain_save.html" method="post" enctype="multipart/form-data">
+		<p>问题反馈（可上传截图）<span style='color:red;'>上传的图片大小不能大于2M，文件名字不能带有中文</span></p>
+		<textarea name="content" cols="100" rows="10" style="width:100%"></textarea>
+		<br>
+		<br>
+		<div id="demo" class="demo" style="width:100%; height: 400px;"></div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<input type="hidden" value="{$uid}" name="uid" />
+		<input type="hidden" value="{$db_id}" name="db_id" />
+		<input name="submit" value="提交修改"  type="submit">
+		<input type="hidden" name="upload_img" value="" id='upload_img'/>
+		<br><br>
+
+	</form>
+	
+
+<!-- 引用核心层插件 -->
+<script type="text/javascript" src="__PUBLIC__/js/zyFile.js"></script>
+<!-- 引用控制层插件 -->
+<script type="text/javascript" src="__PUBLIC__/js/zyUpload.js"></script>
+<!-- 引用初始化JS -->
+<script type="text/javascript" src="__PUBLIC__/js/demo.js"></script>
+
+ </body>
+</html>

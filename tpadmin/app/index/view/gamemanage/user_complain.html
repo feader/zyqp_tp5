@@ -21,8 +21,8 @@
                         <div class="row placeholders">
                                                                      
                             <div class="col-xs-6 col-sm-3">
-                                <input type="text" placeholder="玩家UID" name="uid" value="{$Think.get.uid}" id='uid'><br/> 
-                                <input type="text" placeholder="处理人" name="handler" value="{$Think.get.handler}" id='handler'><br/>
+                                <input type="text" placeholder="玩家UID" name="uid" value="{$Think.get.uid}" id='uid' style="width:110px;"><br/> 
+                                <input type="text" placeholder="处理人" name="handler" value="{$Think.get.handler}" id='handler' style="width:110px;"><br/>
                             </div>
                                                 
                             <div class="col-xs-6 colsm-3 placeholder">
@@ -70,12 +70,15 @@
                                     <th>状态</th>
                                     
                                     <th>内容</th>
+                                    
+                                    <th>截图</th>
                                    
                                     <th>回复</th>
                                    
                                     <th>处理人</th>
                                                                                                        
                                     <th>创建时间</th>                                                                    
+                                    
                                     <th>更新时间</th>                                                                    
                                     
                                 </tr>
@@ -94,6 +97,44 @@
                                     <td>{$vo.status==1 ? '已回复' : '未回复'}</td>
                                                                                                                                                                                                                                                                                                                               
                                     <td>{$vo.content}</td>
+
+                                    <td>
+                                        {php}   
+                                            
+                                            if($vo['upload_img']!='0' && !is_null($vo['upload_img'])){
+                                                
+                                                $num = strpos($vo['upload_img'],'|');
+                                                
+                                                if($num){
+                                                    
+                                                    $res = explode('|',$vo['upload_img']);
+
+                                                    foreach($res as $k => $v){                                                                                                    
+                                                    
+                                                        echo "<img src='__PUBLIC__$v' style='width:100px;height:50px;' class='show_big'>";
+
+                                                        echo "<input type='hidden' value='__PUBLIC__$v' />";
+
+                                                    }
+                                                    
+                                                }else{
+                                                    
+                                                    $upload_img = $vo['upload_img'];
+                                                    
+                                                    echo "<img src='__PUBLIC__$upload_img' style='width:100px;height:50px;' class='show_big'>";
+
+                                                    echo "<input type='hidden' value='__PUBLIC__$upload_img' />";
+
+                                                }
+                                                
+                                            }else{
+
+                                                echo '无截图';
+
+                                            }
+                                                                                                                                                                                    
+                                        {/php}
+                                    </td>
                                    
                                     <td>{$vo.call_back}</td>
                                    
@@ -120,6 +161,15 @@
             </div>
             <!-- endif form -->
         </div>
+        <div id="light" class="white_content" style="display:none;">
+            <p align="center">截图放大</p>
+            <img src="" id='big_img' style="display:block;margin:0 auto;" />
+            <br />
+            <p align="center">
+                <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">点这里关闭本窗口</a>
+            </p>        
+        </div> 
+        <div id="fade" class="black_overlay" style="display:none;"></div>
     </div>
     <!-- Bootstrap core JavaScript==================================================- ->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -138,7 +188,7 @@
                 todayBtn: "linked",
                 format: "yyyy-mm-dd",
             })
-                       
+                                                         
         })
 
         $('#daochu').click(function(){
@@ -148,6 +198,46 @@
             var date_end = $('#date_end').val();
             var url = '/user_complain_down_excel?uid='+uid+'&handler='+handler+'&date_begin='+date_begin+'&date_end='+date_end;
             window.location.href = url; 
+        })
+
+        $('.show_big').click(function(){
+            
+            var show_img_src = $(this).next().val();
+
+            $('#light').css({
+                
+                'display':'block',
+                'position': 'absolute', 
+                'top': '25%', 
+                'left': '25%', 
+                'width': '55%', 
+                'height': '55%', 
+                'padding': '20px', 
+                'border': '10px solid orange', 
+                'background-color': 'white', 
+                'z-index':'1002', 
+                'overflow': 'auto',
+
+            });
+
+            $('#fade').css({
+
+                'display':'block',                               
+                'position': 'absolute', 
+                'top': '0%', 
+                'left': '0%', 
+                'width': '100%', 
+                'height': '100%', 
+                'background-color': 'black', 
+                'z-index':'1001', 
+                '-moz-opacity': '0.8', 
+                'opacity':'.80', 
+                'filter': 'alpha(opacity=88)', 
+               
+            });
+
+            $('#big_img').attr('src',show_img_src);
+            //console.log(show_img_src);
         })
 	</script>
 </body>

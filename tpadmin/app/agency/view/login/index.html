@@ -26,22 +26,24 @@
   
     <body>
         <div class="container">
-            <form method="post" class="form-signin" action="agency_sign_up.html">
+            <form method="post" class="form-signin" action="/agency_sign_up.html">
                 <h2 class="form-signin-heading">代理后台</h2>
                 
-                <input id="inputEmail" name="username" class="form-control" placeholder="用户名" required="" autofocus="" value="feader">
-                <input type="password" name="password" class="form-control" placeholder="密码" required="" value="123456">
-                <input name="checkcode" class="form-control" placeholder="验证码" required="" id='checkcode'>
+                <input id="inputEmail" name="uid" class="form-control" placeholder="用户名" autofocus="" value="hg0001">
+                <input type="password" name="password" class="form-control" placeholder="密码" value="123456">
+                <input type="hidden" name="did" value="{$did}">
+                <input name="checkcode" class="form-control" placeholder="验证码" id='checkcode'>
 
                 <div class='img_checkcode'>                  
                     <img src="{:captcha_src()}" alt="captcha" onclick="this.src='{:captcha_src()}'"/>
                 </div>
                 
-                <div class="checkbox">
+                <div style="height:10px;"></div>
+                <!-- <div class="checkbox">
                     <label>
                         <input type="checkbox" name="remember">记住我
                     </label>
-                </div>
+                </div> -->
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit">登陆</button>
             </form>

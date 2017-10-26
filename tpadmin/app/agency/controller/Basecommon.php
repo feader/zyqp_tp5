@@ -12,29 +12,37 @@ class Basecommon extends Controller{
 	*/ 
 	public function is_login(){
 		
-		$check_agency = Session::has('agency','agency');
-		var_dump($check_agency);
+		$check_agency = Session::has('agency_uid','agency');
+
     	if(!$check_admin){  	
 
     		return false;
 
     	}else{
+    		
     		$view = $this->view;
-    		$admin_user = Session::get('admin_user','agency');
-    		$admin_uid = Session::get('admin_uid','agency');
-			$view->admin_user = $admin_user;
-			$view->admin_uid = $admin_uid;
+
+    		$agency_uid = Session::get('agency_uid','agency');
+
+			$view->agency_uid = $agency_uid;
+			
 			return true;
+
     	}   	
+
 	}
 
 	/*
 	*登陆session过期后的跳转
 	*/ 
 	protected function jump_login($res){
+		
 		if(!$res){
+			
 			$this->error('登陆已超时，请重新登陆！','/agency_login.html');
+		
 		}	
+		
 	}
 
 	/*

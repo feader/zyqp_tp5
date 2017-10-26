@@ -3,6 +3,7 @@ namespace app\agency\controller;
 use \think\Controller;
 use \think\Session;
 use \think\Db;
+use \think\Config;
 
 class Login extends Controller{
 
@@ -10,8 +11,13 @@ class Login extends Controller{
 	*登陆页
 	*/ 
 	public function index(){
-				
+
+		$param = input('param.');
+			
 		$view = $this->view;  
+
+		$view->did = $param['did']; 
+
         // 模板输出
         return $this->fetch();
 
@@ -31,19 +37,23 @@ class Login extends Controller{
 	    
 	    }
 
-	    $admin_name = input('request.username');
+	    $uid = input('request.uid');
 	   
-	    $admin_passwd = input('request.password');
+	    $password = input('request.password');
 	    
-        $res = $this->login_handle($admin_name,$admin_passwd); 
+	    $did = input('request.did');
+	    
+        $res = $this->login_handle($uid,$password,$did); 
+
+        var_dump($res);die;
 
 	    if($res){	    	         
 	    	
-	    	$this->success('登陆成功！','/total_view.html');
+	    	$this->success('登陆成功！','/agency_main.html');
 
 	    }else{
 
-	    	Session::delete('admin_user','admin');
+	    	Session::clear('agency');
 
 	    	$this->error('登陆失败！','/login.html');
 
@@ -60,21 +70,19 @@ class Login extends Controller{
 		
 		$where = array();
 	    
-	    $where['username'] = $admin_name;
+	    $where['uid'] = $admin_name;
 	    
-	    $where['passwd'] = md5($admin_passwd);
+	    $where['password'] = md5($admin_passwd);
+
+	    $db_config = Config::get('db'.$db_num);
 	    
 	    $base = model('Base');
 	    
-	    $res = $base->get_admin_info($where);
-	    
-	    Session::set('admin_user',$res['username'],'admin'); 
-	   
-	    Session::set('admin_uid',$res['uid'],'admin'); 
-	    
-	    Session::set('admin_group_id',$res['gid'],'admin');
-	    
-	    Session::set('db_num',$db_num,'admin');
+	    $res = $base->get_one_agency_info($where,$db_config);
+	    	   
+	    Session::set('agency_uid',$res['uid'],'agency'); 
+	    	    
+	    Session::set('db_config',$db_config,'agency');
         
         return $res;
 
@@ -85,7 +93,7 @@ class Login extends Controller{
 	*/ 
 	public function logout(){
         
-        Session::clear('admin');
+        Session::clear('agency');
         
         $this->success('登出成功！','/login.html');
     

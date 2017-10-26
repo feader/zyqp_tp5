@@ -48,7 +48,7 @@ class Gamemanage extends Tool{
 			$res = Db::connect($db_config)->name('user_complain')->where($where)->order(['create_time'=>'desc'])->paginate($page);
 
 		}
-				
+					
 		return $res;
 	}
 

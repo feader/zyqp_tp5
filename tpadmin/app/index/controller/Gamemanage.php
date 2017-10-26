@@ -36,10 +36,8 @@ class Gamemanage extends Auth{
 	*消耗钻石列表
 	*/ 
 	public function dimond_log(){
-
-		$view = $this->view;
-       
-        $view->header_title = '消耗钻石';
+   
+        $this->view->header_title = '消耗钻石';
 
         $get = input('get.');
 
@@ -66,18 +64,18 @@ class Gamemanage extends Auth{
         $everyday_total_use = 0;
 
         foreach ($all_info as $k => $v) {
-        	$everyday_total_use = $everyday_total_use + $v['everyday_total_use'];
+        	$everyday_total_use += $v['everyday_total_use'];
         }
 
         $page = $all_info->render();	
 		
-		$view->page = $page;
+		$this->view->page = $page;
 		
-		$view->all_cost = $all_cost;
+		$this->view->all_cost = $all_cost;
 		
-		$view->search_cost = $everyday_total_use;
+		$this->view->search_cost = $everyday_total_use;
 
-        $view->all_info = $all_info; 
+        $this->view->all_info = $all_info; 
 							      
 	    // 模板输出
 	    return $this->fetch();
@@ -154,7 +152,7 @@ class Gamemanage extends Auth{
         }
        
         $all_info = $gamemanage->get_all_user_complain_info($where,100,$this->db_config);
-
+       
         $page = $all_info->render();	
 		
 		$view->page = $page;
